@@ -24,9 +24,9 @@ Ultimo aggiornamento: 14/11/2026
   (scheda tipica finisce a 579 px su 650; telefono senza scorrimento laterale).
 - Prova 3 fatta (`esperimento-ricostruzione/prova-3/`): ricostruzione riuscita, stessa misura C34 (579 px),
   aspetto uguale alla bozza; errori trovati e corretti (C32 rimasto vecchio, C30 deciso: secondari ≥ 13,5 px).
-- Da fare: commit del lavoro dopo c05f25c + push con l'account raffaeleciccone.
-- Commit c05f25c fatto in locale, NON pushato: il repo va solo sull'account GitHub raffaeleciccone
-  (sul PC è loggato raffaeleciccone-analyst → serve `gh auth login` con l'account giusto).
+- Tutto su GitHub (14/11, commit 3f75104 e successivi), pushato con l'account raffaeleciccone.
+- GitHub: il repo va SOLO sull'account raffaeleciccone. Su questo PC gh ha due account; per il push:
+  `gh auth switch -u raffaeleciccone` (poi si può tornare a raffaeleciccone-analyst).
 
 ## Prossimo passo: lunedì 16/11, incontro con il prof
 
@@ -45,7 +45,6 @@ Con le risposte:
 
 ## Da decidere con l'utente
 
-- Commit + push su GitHub del lavoro del 14/11.
 - Skill personale `spec-coding` (bozza del 14/11 in `~/.claude/skills/spec-coding/`): l'utente vuole
   rifarla bene in una conversazione dedicata, per lavorare sempre così su tutti i progetti.
 - Prova 2 dell'esperimento fatta (`esperimento-ricostruzione/prova-2/`): prova decisiva passata.
