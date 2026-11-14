@@ -13,9 +13,18 @@
    da fare lunedì)         evita doppioni)                              collegamenti)
 ```
 
-Due container Docker (vincolo del prof):
-- `db`: MySQL 8.4, dati in un volume Docker, healthcheck.
-- `app`: Python 3.12 + Flask, parte solo quando `db` è pronto. Pagina web su http://localhost:8000
+Tre container Docker (SPEC sez. 6: programma e database separati come chiesto dal prof, più nginx
+scelto dall'utente):
+- `web`: nginx 1.27 (`nginx:1.27-alpine`). È l'unico raggiungibile dal PC: http://localhost:8000.
+  Risponde da solo per i file grafici (`/static/...`) e passa tutto il resto ad `app`.
+- `app`: Python 3.12 + Flask servito da waitress sulla porta 8000 **interna** (non esposta al PC).
+- `db`: MySQL 8.4, dati in un volume Docker, healthcheck. `app` parte solo quando `db` è pronto.
+
+```
+ browser ──► web (nginx, porta 8000 del PC)
+              ├── /static/stile.css ──► file letto da app/whoswho/static/ (montato in sola lettura)
+              └── tutto il resto ─────► app:8000 (Flask) ──► db:3306 (MySQL)
+```
 
 ## 2. La "porta d'ingresso" (formato unico dei dati)
 
@@ -55,7 +64,7 @@ Regole dei campi:
   (`2022` → 31/12/2022, `2022-06` → 30/6/2022).
   Una data non valida diventa vuota e finisce negli avvisi; la persona entra lo stesso.
 - Esperienza senza `azienda` o evento senza `nome`: ignorati con un avviso.
-- Collegamenti a mano: non fanno parte dell'import (si scrivono solo dalla pagina, F7).
+- Relazioni (nel codice "collegamenti"): non fanno parte dell'import (si scrivono solo dalla pagina, F7).
 
 Il comando `python -m whoswho.avvio importa <file>` stampa un **resoconto**: quante persone
 importate, quali scartate e perché, gli avvisi (SPEC D7).
@@ -101,10 +110,10 @@ che trasforma LinkedIn / sito eventi / CSV in questo formato.
   esperienze, skill ed eventi si aggiungono, mai si tolgono.
 - **Aziende e skill: stesso nome = stessa** (maiuscole non contano). Eventi: stesso nome + stessa data
   (anche "nessuna data"). Esperienze: stessa persona + azienda + ruolo + data di inizio.
-- **Collegamenti a mano (F7)**: una riga sola per collegamento; la scheda li cerca
+- **Relazioni (F7; tabella `collegamenti`)**: una riga sola per relazione; la scheda li cerca
   sia come persona A sia come persona B, così compaiono in entrambe le schede (C11).
   Prima di salvarlo controllo che non esista già la stessa coppia (in qualsiasi ordine) con la stessa
-  descrizione (maiuscole non contano) → altrimenti "Collegamento già presente." (C22).
+  descrizione (maiuscole non contano) → altrimenti "Relazione già presente." (C22).
 - **Ricerca azienda "contiene", ricerca skill "uguale"** (F3, F4, C21): `LIKE %testo%` per le aziende,
   `=` per le skill, così "Java" non trova "JavaScript".
 - **Ordine alfabetico** (C16, C24): `ORDER BY cognome, nome, id` con la stessa collation, quindi
@@ -142,7 +151,10 @@ che trasforma LinkedIn / sito eventi / CSV in questo formato.
 ```
 whoswho/
 ├── SPEC.md, PIANO.md, README.md
-├── docker-compose.yml        # i due container
+├── docker-compose.yml        # i tre container: web (nginx), app, db
+├── nginx/default.conf        # nginx: /static/ dai file, il resto ad app:8000
+├── design/bozza.html         # bozza grafica approvata (C35)
+├── strumenti/misura_c34.py   # misura C34 con Chrome
 ├── .env.example              # password e porte (copiare in .env)
 ├── db/crea-db-test.sh        # crea il database separato per i test
 ├── dati/esempio.json         # persone finte per provare
@@ -154,7 +166,8 @@ whoswho/
     │   ├── importa.py        # porta d'ingresso (C12, C13)
     │   ├── ricerche.py       # F1-F7
     │   ├── web.py            # pagine web
-    │   ├── avvio.py          # comandi: avvia, importa
+    │   ├── avvio.py          # comandi: avvia, importa, scheda-tipica
+    │   ├── static/stile.css  # l'unico foglio di stile (PIANO sez. 4c)
     │   ├── templates/        # HTML
     │   └── sorgenti/         # lettori dei dati (esempio.py ora; LinkedIn/eventi lunedì)
     └── tests/                # un test per ogni criterio della spec
@@ -169,6 +182,58 @@ whoswho/
 - "‹ Precedente / Successiva ›" nella scheda: la persona prima/dopo nello stesso ordine
   della pagina Persone (cognome, nome, id), calcolata con una query (C17).
 
+## 4c. Grafica (F9, C29-C38)
+
+Riferimento: **`design/bozza.html`**, la bozza approvata dall'utente (C35). Le pagine vere devono somigliarle.
+
+- **Un solo foglio di stile**: `app/whoswho/static/stile.css`, collegato da `templates/base.html` come
+  `/static/stile.css`. Lo serve nginx (in Flask funziona lo stesso, utile per i test).
+  Niente librerie grafiche (SPEC sez. 6).
+- **Colori come variabili** in `:root` (valori e coppie testo/sfondo controllate da `test_grafica.py`, C29):
+
+  | Variabile | Valore | Uso |
+  |---|---|---|
+  | `--blu-notte` | `#1e3250` | barra, titoli delle fasce, iniziali |
+  | `--blu-notte-2` | `#2b4468` | voce attiva della barra |
+  | `--blu-link` | `#2a4d7f` | link, tasti secondari |
+  | `--fascia` | `#e3e9f1` | fascia dei titoli dei riquadri |
+  | `--etichetta` | `#d6e2f1` | sfondo delle skill |
+  | `--bordo` | `#c3cdda` | bordi |
+  | `--sfondo` | `#eef1f5` | sfondo pagina |
+  | `--carta` | `#ffffff` | riquadri |
+  | `--testo` | `#1c2430` | testo |
+  | `--tenue` | `#556070` | testo secondario |
+  | `--avatar` | `#d5deea` | fondo delle iniziali |
+  | `--rosso` | `#b42318` | tasto Elimina |
+  | `--tasto-alto` / `--tasto-basso` | `#2f4a73` / `#1a2c47` | sfumatura dei tasti principali |
+
+- **Misure** (C30, decisione 5): `html { font-size: 18px }`, `h1 { font-size: 28px }`; ogni `font-size` scritto in
+  `px` o `rem` (mai `em` o `%`) e mai sotto 13,5 px (= 0.75rem); foto della testata
+  140 px, miniature 90 px, angoli delle foto 12 px, pagina larga al massimo 1200 px.
+- **Tema sempre chiaro** (C31): nessuna regola `prefers-color-scheme` e `<meta name="color-scheme" content="light">`.
+- **Icone** (C37): disegnate in SVG una volta sola in `base.html` (`<symbol id="i-...">`) e usate con
+  `<svg class="icona"><use href="#i-..."/></svg>`: casa, persone, calendario, lente, più, x, sinistra,
+  destra, indietro.
+- **Scheda persona** (C32-C34), dall'alto: riga con Indietro | Precedente, Successiva; testata
+  (`section.testata`: foto o iniziali, nome in `h1`, professione, "Lavora ora in" = azienda di
+  un'esperienza senza data di fine, link "Profilo online"; a destra `div.striscia` con Colleghi e
+  Conosciuti allo stesso evento come miniature con nome e dettaglio); poi `div.quattro` con 4
+  `section.riquadro` (Dove l'ho incontrato, Dove ha lavorato, Cosa sa fare, Relazioni), ognuna con il
+  titolo in un `h2` (la fascia). Sezione vuota: "nessuno".
+- **Relazioni** (F7, C36): nel codice e nel database restano `collegamenti` (nome tecnico); nell'interfaccia
+  si chiamano "Relazioni". Il modulo per aggiungerle sta in un `<details>` aperto da "+ Aggiungi relazione"
+  (niente JavaScript). Elimina è un modulo con `onsubmit="return confirm('Eliminare la relazione con <nome>?')"`.
+  Messaggi: "Relazione aggiunta.", "Relazione eliminata.", "Relazione già presente.".
+- **Ricerca nella barra**: casella e tasto lente in un unico blocco (`div.blocco-cerca`); il tasto ha
+  `aria-label="Cerca"`.
+- **Misura C34** (non è un test pytest, serve un browser): `python strumenti/misura_c34.py` con l'app accesa.
+  La porta del sito la legge da `HOST_APP_PORT` nel file `.env` (8000 se manca).
+  Usa Chrome senza finestra: a 1366 px di larghezza controlla che il fondo di `div.quattro` della scheda
+  della persona tipica sia entro 650 px; in una cornice larga 390 px controlla che la pagina non sia più
+  larga dello schermo. L'HTML della persona tipica lo produce `python -m whoswho.avvio scheda-tipica`
+  dentro il container `app`, usando il database **dei test** (i dati veri non si toccano); la pagina usa
+  il foglio di stile vero servito da nginx (`<base href="http://localhost:8000/">`).
+
 ## 5. Test
 
 I test girano dentro Docker contro un MySQL vero, su un database separato
@@ -179,7 +244,8 @@ docker compose run --rm app pytest
 ```
 
 Ogni test ha nel nome il criterio che controlla (es. `test_c8_...`).
-`test_criteri.py` copre C1-C13, `test_navigazione.py` C14-C17, `test_esperimento.py` C18-C28.
+`test_criteri.py` copre C1-C13, `test_navigazione.py` C14-C17, `test_esperimento.py` C18-C28,
+`test_grafica.py` C29-C33, C36, C37. C34 si misura con `strumenti/misura_c34.py`; C35 e C38 a vista.
 
 Se un test legge con la sua connessione dati scritti da un'altra (es. dalla pagina web), quella
 connessione deve vedere i dati appena salvati: MySQL di default (REPEATABLE READ) potrebbe mostrarle

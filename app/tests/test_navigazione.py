@@ -56,7 +56,7 @@ def test_c15_indietro_tranne_home(sito):
         if nome == "home":
             assert "Indietro" not in html
         else:
-            assert "← Indietro" in html, f"manca Indietro in: {nome}"
+            assert re.search(r">\s*Indietro\s*</a>", html), f"manca Indietro in: {nome}"
 
 
 def test_c16_pagina_persone_in_ordine_alfabetico(sito):
@@ -76,7 +76,7 @@ def test_c16_pagina_eventi(conn, client_per):
 
 
 def _link(html, testo):
-    m = re.search(r'<a [^>]*href="(/persona/\d+)"[^>]*>[^<]*' + testo, html)
+    m = re.search(r'<a [^>]*href="(/persona/\d+)"[^>]*>(?:(?!</a>).)*?' + testo, html, re.S)
     return m.group(1) if m else None
 
 

@@ -2,11 +2,9 @@
 {% from "_macro.html" import griglia_persone %}
 {% block titolo %}Persone · Who's Who{% endblock %}
 {% block contenuto %}
-<h1>Persone</h1>
-{% if persone %}
-<p class="tenue">{{ persone|length }} in ordine alfabetico</p>
-{{ griglia_persone(persone) }}
-{% else %}
-<p class="vuoto">Nessuna persona ancora.</p>
-{% endif %}
+<div class="intestazione">
+  <h1>Persone</h1>
+  {% if persone %}<p class="tenue">{{ persone|length }} in ordine alfabetico</p>{% endif %}
+</div>
+{% if persone %}{{ griglia_persone(persone) }}{% else %}<p class="vuoto">Nessuna persona ancora.</p>{% endif %}
 {% endblock %}

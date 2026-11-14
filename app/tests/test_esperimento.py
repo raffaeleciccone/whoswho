@@ -68,7 +68,7 @@ def test_c22_collegamento_doppio_rifiutato(conn):
     mario = _persone(conn)[0]["id"]
     luca = ricerche.cerca_per_nome(conn, "Luca")[0]["id"]
     ricerche.aggiungi_collegamento(conn, mario, luca, "Mario è il capo di Luca")
-    with pytest.raises(ValueError, match="già presente"):
+    with pytest.raises(ValueError, match="Relazione già presente"):
         ricerche.aggiungi_collegamento(conn, mario, luca, "Mario è il capo di Luca")
     with pytest.raises(ValueError, match="già presente"):   # dalla scheda di Luca, maiuscole diverse
         ricerche.aggiungi_collegamento(conn, luca, mario, "mario è il capo di luca")
@@ -84,7 +84,7 @@ def test_c22_messaggio_nella_pagina(conn, client_per):
     dati = {"altra_persona": luca, "descrizione": "capo"}
     client.post(f"/persona/{mario}/collegamenti", data=dati)
     html = client.post(f"/persona/{mario}/collegamenti", data=dati, follow_redirects=True).get_data(as_text=True)
-    assert "Collegamento già presente." in html
+    assert "Relazione già presente." in html
 
 
 # ---------- D6: il reimport non cancella ----------

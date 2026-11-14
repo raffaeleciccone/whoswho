@@ -4,17 +4,29 @@ Ultimo aggiornamento: 14/11/2026
 
 ## Stato
 
-- **SPEC.md approvata** (F1-F8, criteri C1-C28, regole import D4-D7), tranne le fonti dati D1-D2, che aspettano il prof.
+- **SPEC.md approvata** (F1-F9, criteri C1-C38, regole import D4-D7), tranne le fonti dati D1-D2, che aspettano il prof.
 - **Programma funzionante** su http://localhost:8000 con persone inventate di esempio:
   ricerca per nome (anche a pezzi) / azienda / skill / evento, scheda persona, persone collegate
   (colleghi, stesso evento, collegamenti a mano), barra di navigazione, Indietro, Precedente/Successiva.
-- **44 test, tutti verdi** (`docker compose run --rm app pytest -q`).
+- **52 test, tutti verdi** (`docker compose run --rm app pytest -q`).
   Verificato che i test se ne accorgono se si rompe una regola (provato su C8, C22, C25, C26, C27, C28).
 - **Esperimento di ricostruzione fatto** (`esperimento-ricostruzione/`): un Claude nuovo ha rifatto
   il progetto dai soli .md; i suoi 36 dubbi hanno portato a: regola "stessa persona" (D4-D5, C18-C20),
   niente collegamenti doppi (C22), formato del file di import e dettagli tecnici in PIANO.md sez. 2 e 3b.
 - **Non ancora su GitHub**: tutto il lavoro del 14/11 è solo in locale, nessun commit.
   `SPECIFICHE.md` è stato rimosso (il contenuto ora è in PIANO.md).
+
+## Grafica (14/11, fatta in SDD)
+- SPEC sez. 3c (F9, C29-C38): tutte le decisioni prese dall'utente una alla volta (disposizione, testata,
+  foto, misure, larghezza, skill, tonalità, tasti, icone, nome "Relazioni"); tecniche in sez. 6
+  (HTML+CSS nostro, TRE container con nginx davanti, strumenti confermati).
+- Bozza approvata: `design/bozza.html`. Programma aggiornato: 52 test verdi, C34 misurato e rispettato
+  (scheda tipica finisce a 579 px su 650; telefono senza scorrimento laterale).
+- Prova 3 fatta (`esperimento-ricostruzione/prova-3/`): ricostruzione riuscita, stessa misura C34 (579 px),
+  aspetto uguale alla bozza; errori trovati e corretti (C32 rimasto vecchio, C30 deciso: secondari ≥ 13,5 px).
+- Da fare: commit del lavoro dopo c05f25c + push con l'account raffaeleciccone.
+- Commit c05f25c fatto in locale, NON pushato: il repo va solo sull'account GitHub raffaeleciccone
+  (sul PC è loggato raffaeleciccone-analyst → serve `gh auth login` con l'account giusto).
 
 ## Prossimo passo: lunedì 16/11, incontro con il prof
 

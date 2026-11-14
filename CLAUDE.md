@@ -1,7 +1,7 @@
 # Who's Who — istruzioni per Claude
 
 Progetto universitario (richiesta del prof): ricordare chi ho conosciuto, dove, dove ha lavorato,
-cosa sa fare e con chi è collegato. Python + MySQL in due container Docker, pagina web Flask.
+cosa sa fare e con chi è collegato. Python + MySQL + nginx in tre container Docker, pagina web Flask.
 
 Questo progetto si sviluppa **by spec**, non a vibe coding. L'utente sta imparando il metodo:
 spiegagli cosa stai facendo e perché, in italiano semplice.
@@ -11,7 +11,8 @@ spiegagli cosa stai facendo e perché, in italiano semplice.
 1. **HANDOFF.md**: a che punto siamo e cosa c'è da fare adesso
 2. **SPEC.md**: COSA deve fare il programma (funzioni F, cosa NON fa, criteri C, domande aperte)
 3. **PIANO.md**: COME è costruito, e il motivo di ogni scelta
-4. Il codice, solo la parte che serve al compito
+4. Per la grafica: **design/bozza.html** (bozza approvata dall'utente, criterio C35)
+5. Il codice, solo la parte che serve al compito
 
 SPEC.md è la fonte di verità. Se il codice o il piano la contraddicono, vince la spec.
 
@@ -36,11 +37,12 @@ SPEC.md è la fonte di verità. Se il codice o il piano la contraddicono, vince 
 ## Comandi
 
 ```bash
-docker compose up -d --build              # avvia db + app → http://localhost:8000
+docker compose up -d --build              # avvia web (nginx) + app + db → http://localhost:8000
 docker compose restart app                # dopo modifiche al codice (waitress non ricarica da solo)
 docker compose run --rm app pytest -q     # tutti i test (database separato whoswho_test)
 docker compose run --rm app python -m whoswho.avvio importa /dati/file.json   # file in dati/
 docker compose down                       # ferma (down -v cancella anche i dati)
+python strumenti/misura_c34.py            # misura C34 con Chrome (programma acceso)
 ```
 
 In Git Bash su Windows i comandi con percorsi del container (`/dati/...`) vogliono `MSYS_NO_PATHCONV=1` davanti.
@@ -59,7 +61,11 @@ Docker Desktop deve essere acceso; se non lo è, avvialo
 - Quando la documentazione non basta per decidere, non indovinare in silenzio: chiedi all'utente
   (se è una decisione sul cosa) o scrivi la scelta in PIANO.md (se è tecnica).
   Lezione dell'esperimento in `esperimento-ricostruzione/`.
-- La barra di navigazione sta in `templates/base.html`: ogni pagina nuova la eredita (C14).
+- La barra di navigazione e le icone stanno in `templates/base.html`: ogni pagina nuova le eredita (C14, C37).
+- Grafica: un solo foglio di stile `app/whoswho/static/stile.css`, niente librerie (SPEC sez. 6). Ogni cambio
+  di aspetto passa prima dalla spec (sez. 3c) e, se è visibile, da una bozza in `design/` approvata dall'utente.
+  I dettagli grafici (misure, colori, nomi dei riquadri) li decide l'utente, una domanda alla volta.
+- Nell'interfaccia le relazioni scritte a mano si chiamano "Relazioni"; nel codice e nel database `collegamenti`.
 - Testi dell'interfaccia e messaggi in italiano.
 - Persone di esempio solo inventate (`dati/esempio.json`).
 - Scraping e dati personali: LinkedIn vieta lo scraping nei termini d'uso e ci sono di mezzo

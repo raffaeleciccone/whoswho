@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who's Who — bozza grafica definitiva</title>
+<!--
+  BOZZA GRAFICA v3 (SPEC sez. 3c, F9, criteri C29-C38). Pagina statica con dati inventati.
+  Decisioni dell'utente del 14/11:
+   1  testata con persone collegate a destra + 4 riquadri in una riga (C34: sta in 1366x650)
+   nome del riquadro: "Relazioni"
+   2  testata: foto, nome, professione, dove lavora ora, profilo online
+   4  foto quadrate arrotondate     5  dimensioni medie (foto 140, miniature 90, testo 18, titoli 28)
+   6  larghezza max 1200 centrata   7  skill come etichette colorate      8  tonalità grigio-azzurro
+   tasti: principali con sfumatura e rilievo, secondari a contorno, Elimina rosso con conferma,
+          Cerca = casella + lente in un unico blocco, icone nella barra e nei tasti
+   tema sempre chiaro (C31)
+-->
+<style>
+  :root {
+    --blu-notte: #1e3250;  --blu-notte-2: #2b4468;  --blu-link: #2a4d7f;
+    --fascia: #e3e9f1;     --etichetta: #d6e2f1;    --bordo: #c3cdda;
+    --sfondo: #eef1f5;     --carta: #ffffff;        --testo: #1c2430;
+    --tenue: #556070;      --avatar: #d5deea;       --rosso: #b42318;
+    --raggio-foto: 12px;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 18px; }
+  body { margin: 0; background: var(--sfondo); color: var(--testo);
+         font-family: "Segoe UI", Tahoma, Arial, sans-serif; line-height: 1.45; }
+  a { color: var(--blu-link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .contenitore { max-width: 1200px; margin: 0 auto; padding-inline: 16px; }
+
+  /* ---- icone ---- */
+  .icona { width: 1em; height: 1em; vertical-align: -.15em; flex: none;
+           fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---- barra in alto ---- */
+  .barra { background: var(--blu-notte); color: #fff; }
+  .barra .contenitore { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; padding-block: .55rem; }
+  .barra .logo { color: #fff; font-weight: 700; font-size: 1.35rem; }
+  .barra nav { display: flex; gap: .25rem; }
+  .barra nav a { color: #fff; padding: .35rem .7rem; border-radius: 6px; display: inline-flex; align-items: center; gap: .4rem; }
+  .barra nav a:hover, .barra nav a[aria-current] { background: var(--blu-notte-2); text-decoration: none; }
+  /* Cerca: casella + lente in un unico blocco bianco */
+  .ricerca { display: flex; gap: .4rem; flex: 1 1 360px; min-width: 0; max-width: 100%; }
+  .ricerca select { font: inherit; border: 0; border-radius: 6px; padding: .35rem .5rem; }
+  .blocco-cerca { flex: 1; display: flex; background: #fff; border-radius: 6px; overflow: hidden; min-width: 0; }
+  .blocco-cerca input { flex: 1; min-width: 0; font: inherit; border: 0; padding: .35rem .65rem; outline-offset: -3px; }
+  .blocco-cerca button { border: 0; border-left: 1px solid var(--bordo); background: #fff; color: var(--blu-notte);
+                         padding: 0 .8rem; cursor: pointer; font-size: 1.1rem; display: grid; place-items: center; }
+  .blocco-cerca button:hover { background: var(--fascia); }
+
+  main { padding-block: .6rem 2rem; }
+  h1 { font-size: 1.56rem; margin: 0; line-height: 1.2; }
+  .etichetta-vista { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tenue);
+                     margin: 2.5rem 0 .6rem; border-top: 2px dashed var(--bordo); padding-top: .8rem; }
+
+  /* ---- tasti ---- */
+  .tasto { font: inherit; font-weight: 600; cursor: pointer; border-radius: 6px; padding: .35rem .85rem;
+           line-height: 1.2; display: inline-flex; align-items: center; gap: .4rem; text-decoration: none !important; }
+  .tasto-principale { color: #fff; background: linear-gradient(#2f4a73, #1a2c47); border: 1px solid #13213a;
+                      box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 2px 3px rgba(20,33,58,.35); }
+  .tasto-principale:hover { background: linear-gradient(#36557f, #1e3250); }
+  .tasto-principale:active { transform: translateY(1px); box-shadow: 0 1px 1px rgba(20,33,58,.35) inset; }
+  .tasto-secondario { color: var(--blu-link); background: var(--carta); border: 1px solid var(--bordo); }
+  .tasto-secondario:hover { border-color: var(--blu-link); background: #f6f8fb; }
+  .tasto-secondario:active { transform: translateY(1px); }
+  .tasto-pericolo { color: var(--rosso); background: var(--carta); border: 1px solid #e3a59f; font-size: .8rem; padding: .15rem .5rem; }
+  .tasto-pericolo:hover { background: #fdf1f0; border-color: var(--rosso); }
+
+  /* ---- riga di navigazione: Indietro | Precedente Successiva ---- */
+  .navigazione { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .6rem; }
+  .navigazione .scorri { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+  /* ---- riquadri con titolo a fascia ---- */
+  .riquadro { background: var(--carta); border: 1px solid var(--bordo); border-radius: 6px; overflow: hidden; }
+  .riquadro > h2 { margin: 0; font-size: 1rem; background: var(--fascia); color: var(--blu-notte);
+                   padding: .35rem .8rem; border-bottom: 1px solid var(--bordo); }
+  .riquadro > .corpo { padding: .55rem .8rem; }
+  .lista { list-style: none; margin: 0; padding: 0; }
+  .lista li { padding: .3rem 0; border-bottom: 1px solid var(--fascia); }
+  .lista li:last-child { border-bottom: 0; }
+  .tenue { color: var(--tenue); }
+  .piccolo { font-size: .85rem; }
+
+  /* ---- testata ---- */
+  .testata { display: flex; gap: 1.25rem; align-items: center; padding: .8rem 1rem; margin-bottom: .75rem; }
+  .foto { width: 140px; height: 140px; flex: none; display: grid; place-items: center; background: var(--avatar);
+          color: var(--blu-notte); font-size: 3.2rem; font-weight: 700; border-radius: var(--raggio-foto); }
+  .testata .dati { display: grid; gap: .1rem; }
+  .testata .professione { font-size: 1.1rem; }
+
+  /* ---- 4 riquadri in una riga (2 a 2 su schermi medi, 1 sul telefono) ---- */
+  .quattro { display: grid; gap: .75rem; grid-template-columns: 1fr; margin-bottom: .75rem; }
+  @media (min-width: 700px)  { .quattro { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .quattro { grid-template-columns: repeat(4, 1fr); } }
+
+  .etichette { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; margin: 0; padding: 0; }
+  .etichette a { display: inline-block; padding: .15rem .6rem; border-radius: 6px; background: var(--etichetta);
+                 color: var(--blu-notte); font-weight: 600; }
+
+  .riga-collegamento { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  details.aggiungi { margin-top: .5rem; }
+  details.aggiungi summary { list-style: none; display: inline-flex; }
+  details.aggiungi summary::-webkit-details-marker { display: none; }
+  .modulo { display: grid; gap: .4rem; margin-top: .5rem; }
+  .modulo select, .modulo input { font: inherit; border: 1px solid var(--bordo); border-radius: 6px; padding: .3rem .5rem; background: #fff; min-width: 0; }
+
+  /* ---- persone collegate, nella testata a destra (decisione 1, terza versione) ---- */
+  .testata { flex-wrap: wrap; }
+  .striscia { display: flex; flex-wrap: wrap; gap: .75rem 2rem; margin-left: auto;
+              border-left: 1px solid var(--bordo); padding-left: 1.25rem; }
+  @media (max-width: 1000px) { .striscia { margin-left: 0; border-left: 0; padding-left: 0;
+                                            border-top: 1px solid var(--bordo); padding-top: .75rem; width: 100%; } }
+  .sottotitolo { font-weight: 600; margin: 0 0 .35rem; }
+  .griglia-persone { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .griglia-persone a { width: 100px; text-align: center; color: var(--testo); }
+  .griglia-persone .mini { width: 90px; height: 90px; margin: 0 auto .2rem; display: grid; place-items: center;
+                           background: var(--avatar); color: var(--blu-notte); font-size: 1.5rem; font-weight: 700;
+                           border-radius: var(--raggio-foto); }
+  .griglia-persone .nome { color: var(--blu-link); font-weight: 600; line-height: 1.2; font-size: .9rem; }
+  .griglia-persone .dettaglio { font-size: .75rem; color: var(--tenue); }
+
+  /* ---- risultati ---- */
+  .risultati { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .risultato { display: flex; gap: .8rem; align-items: center; background: var(--carta); border: 1px solid var(--bordo);
+               border-radius: 6px; padding: .7rem; color: var(--testo); }
+  .risultato .mini { width: 64px; height: 64px; flex: none; display: grid; place-items: center; background: var(--avatar);
+                     color: var(--blu-notte); font-weight: 700; font-size: 1.3rem; border-radius: var(--raggio-foto); }
+  .risultato strong { color: var(--blu-link); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+  <symbol id="i-persone" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.6c2.6.2 4.4 1.9 5 4.9"/></symbol>
+  <symbol id="i-calendario" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-lente" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/></symbol>
+  <symbol id="i-piu" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-sinistra" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-destra" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M10 6l-6 6 6 6"/><path d="M4 12h16"/></symbol>
+</svg>
+
+<header class="barra">
+  <div class="contenitore">
+    <a class="logo" href="#">Who's Who</a>
+    <nav>
+      <a href="#"><svg class="icona"><use href="#i-casa"/></svg>Home</a>
+      <a href="#" aria-current="page"><svg class="icona"><use href="#i-persone"/></svg>Persone</a>
+      <a href="#"><svg class="icona"><use href="#i-calendario"/></svg>Eventi</a>
+    </nav>
+    <form class="ricerca" onsubmit="return false" role="search">
+      <select aria-label="Cerca per"><option>Nome</option><option>Azienda</option><option>Skill</option></select>
+      <div class="blocco-cerca">
+        <input placeholder="Cerca…" aria-label="Testo da cercare">
+        <button aria-label="Cerca" title="Cerca"><svg class="icona"><use href="#i-lente"/></svg></button>
+      </div>
+    </form>
+  </div>
+</header>
+
+<main class="contenitore">
+  <div class="navigazione">
+    <a class="tasto tasto-secondario" href="#"><svg class="icona"><use href="#i-indietro"/></svg>Indietro</a>
+    <div class="scorri">
+      <a class="tasto tasto-secondario" href="#"><svg class="icona"><use href="#i-sinistra"/></svg>Precedente: Maria Romano</a>
+      <a class="tasto tasto-secondario" href="#">Successiva: Andrea Rossi<svg class="icona"><use href="#i-destra"/></svg></a>
+    </div>
+  </div>
+
+  <section class="riquadro testata" aria-label="Dati principali">
+    <div class="foto" aria-hidden="true">MR</div>
+    <div class="dati">
+      <h1>Mario Rossi</h1>
+      <div class="professione">Data Engineer</div>
+      <div class="tenue">Lavora ora in <a href="#">Nexa Data</a></div>
+      <div><a href="#">Profilo online</a></div>
+    </div>
+    <div class="striscia" aria-label="Persone collegate">
+      <div>
+        <p class="sottotitolo">Colleghi</p>
+        <div class="griglia-persone">
+          <a href="#"><div class="mini">LB</div><div class="nome">Luca Bianchi</div><div class="dettaglio">Accenture</div></a>
+          <a href="#"><div class="mini">GE</div><div class="nome">Giulia Esposito</div><div class="dettaglio">Nexa Data</div></a>
+          <a href="#"><div class="mini">MR</div><div class="nome">Maria Romano</div><div class="dettaglio">Nexa Data</div></a>
+        </div>
+      </div>
+      <div>
+        <p class="sottotitolo">Conosciuti allo stesso evento</p>
+        <div class="griglia-persone">
+          <a href="#"><div class="mini">GE</div><div class="nome">Giulia Esposito</div><div class="dettaglio">Data Summit 2026</div></a>
+          <a href="#"><div class="mini">MR</div><div class="nome">Maria Romano</div><div class="dettaglio">Data Summit 2026</div></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quattro">
+    <section class="riquadro">
+      <h2>Dove l'ho incontrato</h2>
+      <div class="corpo"><ul class="lista">
+        <li><a href="#">Data Summit 2026</a><br><span class="tenue piccolo">10/05/2026 · Milano</span><br>
+            <span class="piccolo">Parlato di pipeline dati e dbt</span></li>
+      </ul></div>
+    </section>
+    <section class="riquadro">
+      <h2>Dove ha lavorato</h2>
+      <div class="corpo"><ul class="lista">
+        <li><a href="#"><strong>Nexa Data</strong></a><br><span class="tenue piccolo">Senior Data Engineer · 07/2022 – oggi</span></li>
+        <li><a href="#"><strong>Accenture</strong></a><br><span class="tenue piccolo">Consultant · 01/2019 – 06/2022</span></li>
+      </ul></div>
+    </section>
+    <section class="riquadro">
+      <h2>Cosa sa fare</h2>
+      <div class="corpo"><ul class="etichette">
+        <li><a href="#">Airflow</a></li><li><a href="#">Docker</a></li><li><a href="#">Python</a></li><li><a href="#">SQL</a></li>
+      </ul></div>
+    </section>
+    <section class="riquadro">
+      <h2>Relazioni</h2>
+      <div class="corpo">
+        <ul class="lista">
+          <li class="riga-collegamento">
+            <span><a href="#">Luca Bianchi</a><br><span class="piccolo">Mario è il capo di Luca</span></span>
+            <button class="tasto tasto-pericolo" onclick="confirm('Eliminare la relazione con Luca Bianchi?')">
+              <svg class="icona"><use href="#i-x"/></svg>Elimina</button>
+          </li>
+        </ul>
+        <details class="aggiungi">
+          <summary class="tasto tasto-principale"><svg class="icona"><use href="#i-piu"/></svg>Aggiungi relazione</summary>
+          <form class="modulo" onsubmit="return false">
+            <select aria-label="Persona con cui ha la relazione"><option>Scegli una persona…</option><option>Bianchi Luca</option></select>
+            <input placeholder="es. Mario è il capo di…" aria-label="Descrizione">
+            <button class="tasto tasto-principale"><svg class="icona"><use href="#i-piu"/></svg>Salva relazione</button>
+          </form>
+        </details>
+      </div>
+    </section>
+  </div>
+
+  <p class="etichetta-vista">Vista 2 — Risultati di una ricerca (skill: Docker) · sotto questa linea è solo un'altra pagina di esempio</p>
+  <h1 style="margin-bottom:.3rem">Skill: “Docker”</h1>
+  <p class="tenue" style="margin-top:0">3 persone</p>
+  <div class="risultati">
+    <a class="risultato" href="#"><div class="mini">LB</div><div><strong>Luca Bianchi</strong><br><span class="tenue">Cloud Architect</span></div></a>
+    <a class="risultato" href="#"><div class="mini">AR</div><div><strong>Andrea Rossi</strong><br><span class="tenue">Machine Learning Engineer</span></div></a>
+    <a class="risultato" href="#"><div class="mini">MR</div><div><strong>Mario Rossi</strong><br><span class="tenue">Data Engineer</span></div></a>
+  </div>
+</main>
+</body>
+</html>

@@ -1,16 +1,17 @@
-{% macro avatar(p, grande=false) -%}
+{#- Foto o iniziali, quadrate con angoli arrotondati (decisione 4) -#}
+{% macro avatar(p, classe='mini') -%}
   {%- if p.foto -%}
-    <img class="avatar{{ ' grande' if grande }}" src="{{ p.foto }}" alt="">
+    <img class="{{ classe }}" src="{{ p.foto }}" alt="">
   {%- else -%}
-    <span class="avatar{{ ' grande' if grande }}" aria-hidden="true">{{ p.nome[:1] }}{{ p.cognome[:1] }}</span>
+    <span class="{{ classe }}" aria-hidden="true">{{ p.nome[:1] }}{{ p.cognome[:1] }}</span>
   {%- endif -%}
 {%- endmacro %}
 
-{#- Griglia di schede persona: usata da risultati e da Persone -#}
+{#- Elenco di persone come schede cliccabili: risultati e pagina Persone -#}
 {% macro griglia_persone(elenco) -%}
-<div class="griglia">
+<div class="risultati">
   {% for p in elenco %}
-  <a class="riquadro persona" href="{{ url_for('persona', persona_id=p.id) }}">
+  <a class="risultato" href="{{ url_for('persona', persona_id=p.id) }}">
     {{ avatar(p) }}
     <span><strong>{{ p.nome }} {{ p.cognome }}</strong><br>
       <span class="tenue">{{ p.professione or '' }}</span></span>
@@ -19,14 +20,28 @@
 </div>
 {%- endmacro %}
 
-{#- Elenco eventi: usato da Home ed Eventi -#}
+{#- Miniature delle persone collegate, nella testata (C33) -#}
+{% macro miniature(elenco) -%}
+<div class="griglia-persone">
+  {% for c in elenco %}
+  <a href="{{ url_for('persona', persona_id=c.id) }}">
+    {{ avatar(c) }}
+    <span class="nome">{{ c.nome }} {{ c.cognome }}</span>
+    <span class="dettaglio">{{ c.dettaglio }}</span>
+  </a>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{#- Elenco eventi: Home ed Eventi -#}
 {% macro lista_eventi(eventi) -%}
-<div class="riquadro">
-  <ul class="lista">
+<section class="riquadro">
+  <h2>Eventi</h2>
+  <div class="corpo"><ul class="lista">
     {% for ev in eventi %}
     <li><a href="{{ url_for('cerca', tipo='evento', evento=ev.id) }}">{{ ev.nome }}</a>
         <span class="tenue"> · {{ ev.data|data_it }}{% if ev.luogo %} · {{ ev.luogo }}{% endif %}</span></li>
     {% endfor %}
-  </ul>
-</div>
+  </ul></div>
+</section>
 {%- endmacro %}

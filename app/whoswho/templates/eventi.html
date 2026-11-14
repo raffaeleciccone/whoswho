@@ -2,11 +2,9 @@
 {% from "_macro.html" import lista_eventi %}
 {% block titolo %}Eventi · Who's Who{% endblock %}
 {% block contenuto %}
-<h1>Eventi</h1>
-{% if eventi %}
-<p class="tenue">Dal più recente. Clicca un evento per vedere chi hai incontrato.</p>
-{{ lista_eventi(eventi) }}
-{% else %}
-<p class="vuoto">Nessun evento ancora.</p>
-{% endif %}
+<div class="intestazione">
+  <h1>Eventi</h1>
+  {% if eventi %}<p class="tenue">Dal più recente. Clicca un evento per vedere chi hai incontrato.</p>{% endif %}
+</div>
+{% if eventi %}{{ lista_eventi(eventi) }}{% else %}<p class="vuoto">Nessun evento ancora.</p>{% endif %}
 {% endblock %}

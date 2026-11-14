@@ -93,11 +93,11 @@ def crea_app(database: str | None = None) -> Flask:
         try:
             altra = int(request.form.get("altra_persona", ""))
         except ValueError:
-            flash("Scegli la persona da collegare.", "errore")
+            flash("Scegli la persona della relazione.", "errore")
             return redirect(url_for("persona", persona_id=persona_id))
         try:
             ricerche.aggiungi_collegamento(conn(), persona_id, altra, request.form.get("descrizione", ""))
-            flash("Collegamento aggiunto.")
+            flash("Relazione aggiunta.")
         except ValueError as e:
             flash(str(e), "errore")
         return redirect(url_for("persona", persona_id=persona_id))
@@ -105,7 +105,7 @@ def crea_app(database: str | None = None) -> Flask:
     @app.post("/persona/<int:persona_id>/collegamenti/<int:collegamento_id>/elimina")
     def elimina_collegamento(persona_id, collegamento_id):
         ricerche.elimina_collegamento(conn(), collegamento_id)
-        flash("Collegamento eliminato.")
+        flash("Relazione eliminata.")
         return redirect(url_for("persona", persona_id=persona_id))
 
     return app

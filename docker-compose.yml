@@ -32,9 +32,20 @@ services:
     volumes:
       - ./app:/app
       - ./dati:/dati:ro
-    ports:
-      - "${HOST_APP_PORT:-8000}:8000"
+    expose:
+      - "8000"          # solo interna: dal PC si passa da nginx (servizio "web")
     command: ["python", "-m", "whoswho.avvio", "avvia"]
+
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app/whoswho/static:/usr/share/nginx/html/static:ro
+    ports:
+      - "${HOST_APP_PORT:-8000}:80"
 
 volumes:
   db_dati:

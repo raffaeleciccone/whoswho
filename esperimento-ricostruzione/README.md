@@ -24,4 +24,5 @@ L'esperimento non serve a vedere se l'AI è brava: serve a **misurare quanto è 
 | [RISULTATI.md](RISULTATI.md) | prova 1: com'è andata, cosa abbiamo imparato e corretto |
 | [DUBBI-del-claude-nuovo.md](DUBBI-del-claude-nuovo.md) | prova 1: i 36 punti in cui il Claude nuovo ha dovuto indovinare |
 | [prova-2/](prova-2/) | la stessa prova rifatta con i documenti corretti: risultati e confronto con la prova 1 |
+| [prova-3/](prova-3/) | la prova rifatta dopo la grafica (nginx, bozza, misura C34): risultati e confronto con le prove 1 e 2 |
 | [per-la-classe/](per-la-classe/) | tutto il necessario per rifare l'esperimento a lezione |

@@ -2,11 +2,13 @@
 {% from "_macro.html" import griglia_persone %}
 {% block titolo %}{{ titolo }} · Who's Who{% endblock %}
 {% block contenuto %}
-<h1>{{ titolo }}</h1>
+<div class="intestazione">
+  <h1>{{ titolo }}</h1>
+  {% if risultati %}<p class="tenue">{{ risultati|length }} {{ 'persona' if risultati|length == 1 else 'persone' }}</p>{% endif %}
+</div>
 {% if vuota %}
 <p class="vuoto">Scrivi qualcosa da cercare.</p>
 {% elif risultati %}
-<p class="tenue">{{ risultati|length }} {{ 'persona' if risultati|length == 1 else 'persone' }}</p>
 {{ griglia_persone(risultati) }}
 {% else %}
 <p class="vuoto">Nessun risultato.</p>

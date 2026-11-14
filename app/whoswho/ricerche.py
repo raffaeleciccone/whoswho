@@ -157,9 +157,9 @@ def collegamenti_a_mano(conn, persona_id: int) -> list[dict]:
 def aggiungi_collegamento(conn, persona_a_id: int, persona_b_id: int, descrizione: str) -> int:
     descrizione = pulisci(descrizione)
     if persona_a_id == persona_b_id:
-        raise ValueError("Una persona non può essere collegata a se stessa.")
+        raise ValueError("Una persona non può avere una relazione con se stessa.")
     if not descrizione:
-        raise ValueError("Scrivi una descrizione del collegamento.")
+        raise ValueError("Scrivi una descrizione della relazione.")
     with conn.cursor() as cur:
         cur.execute("SELECT COUNT(*) AS n FROM persone WHERE id IN (%s, %s)", (persona_a_id, persona_b_id))
         if cur.fetchone()["n"] != 2:
@@ -172,7 +172,7 @@ def aggiungi_collegamento(conn, persona_a_id: int, persona_b_id: int, descrizion
             (persona_a_id, persona_b_id, persona_b_id, persona_a_id, descrizione),
         )
         if cur.fetchone()["n"]:
-            raise ValueError("Collegamento già presente.")
+            raise ValueError("Relazione già presente.")
         cur.execute(
             "INSERT INTO collegamenti (persona_a_id, persona_b_id, descrizione) VALUES (%s, %s, %s)",
             (persona_a_id, persona_b_id, descrizione),
