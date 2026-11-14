@@ -200,3 +200,4 @@ Aggiunti il 14/11 dopo l'esperimento di ricostruzione (vedi esperimento-ricostru
   oppure import del CSV dei collegamenti che LinkedIn fa scaricare? (il CSV però non ha foto né skill)
 - Il prof ha parlato di CSV? Se sì: CSV di cosa e con quali colonne?
 - Sito eventi del prof: quale indirizzo? Mostra la lista partecipanti/speaker? Si può esportare in CSV?
+- Il prof ha chiesto programma e database in due container: va bene il terzo container nginx davanti?

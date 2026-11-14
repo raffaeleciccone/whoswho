@@ -1,35 +1,52 @@
 # Rifare l'esperimento a lezione
 
-Durata: circa 30 minuti (10-15 di lavoro dell'AI, il resto per il confronto e la discussione).
+**Domanda dell'esperimento:** un assistente AI che non ha mai visto il progetto riesce a ricostruirlo
+leggendo **solo la documentazione**? E dove deve indovinare?
+
+Durata: circa 45 minuti (15-25 di lavoro dell'AI, il resto per il confronto e la discussione).
 
 ## Cosa serve
-- Un PC con **Docker Desktop** acceso e **Claude Code**.
-- Questa cartella `per-la-classe/`.
+
+- Un PC per gruppo con **Docker Desktop** acceso e un **assistente AI che usa il terminale**
+  (Claude Code, Antigravity, Cursor...): vedi [STRUMENTI.md](STRUMENTI.md).
+- **Google Chrome** (o Edge) per la misura C34.
+- Una copia di questo repository (`git clone`).
+
+## Idea per la classe: gruppi con assistenti diversi
+
+Dividete la classe in gruppi e date a ogni gruppo un assistente diverso (per esempio un gruppo con
+Claude Code, uno con Antigravity, uno con un altro). Tutti partono dagli **stessi documenti** e dallo
+**stesso prompt**. Alla fine si confrontano i risultati: è il modo migliore per vedere quanto conta la
+documentazione e quanto l'assistente.
 
 ## Passi
 
-1. **Prepara una cartella vuota** e copiaci dentro **solo** i file di `documenti/`:
+1. **Prepara la cartella** con i soli documenti (dalla cartella `per-la-classe`):
    ```powershell
-   New-Item -ItemType Directory C:\lezione\ricostruito
-   Copy-Item documenti\*.md C:\lezione\ricostruito\
+   .\prepara-cartella.ps1 C:\lezione\ricostruito
    ```
-2. **Apri una sessione nuova** di Claude Code in `C:\lezione\ricostruito`
-   (importante: nuova, così non sa niente del progetto).
+   (con `-Prova1` si usano i documenti della prova 1, prima delle correzioni: vedi "Variante")
+2. **Apri l'assistente** in quella cartella, in una conversazione **nuova** ([STRUMENTI.md](STRUMENTI.md)).
 3. **Incolla il prompt** di [prompt.md](prompt.md), con il percorso giusto.
-4. **Mentre lavora**, fai leggere alla classe SPEC.md e chiedi: *"secondo voi dove dovrà indovinare?"*.
-   Scrivete le ipotesi alla lavagna.
-5. **Quando ha finito**, fai i controlli di [VERIFICA.md](VERIFICA.md).
-6. **Leggete insieme il suo DUBBI.md** e confrontatelo con le ipotesi della lavagna
-   e con [../DUBBI-del-claude-nuovo.md](../DUBBI-del-claude-nuovo.md) (il nostro risultato).
-   Dividete i dubbi nei 4 tipi di [../RISULTATI.md](../RISULTATI.md):
-   A buchi nella spec · B buchi nel piano · C errori · D libertà accettabili.
+4. **Mentre lavora**, leggete SPEC.md e chiedetevi: *"dove dovrà indovinare?"*. Scrivete le ipotesi alla lavagna.
+5. **Quando ha finito**, fate i controlli di [VERIFICA.md](VERIFICA.md).
+6. **Leggete il suo DUBBI.md** e dividete i dubbi in 4 tipi:
+   - **A. Buchi nella spec**: decisioni che spettavano all'utente (le più importanti)
+   - **B. Buchi nel piano**: scelte tecniche giuste, ma non scritte
+   - **C. Errori nei documenti**: contraddizioni, frasi rimaste vecchie
+   - **D. Libertà accettabili**: aspetto, testi, dettagli che non serve specificare
+7. **Confrontate** con le nostre prove: [prova 1](../RISULTATI.md), [prova 2](../prova-2/RISULTATI.md),
+   [prova 3](../prova-3/RISULTATI.md), e tra i gruppi.
 
 ## Domande per la discussione
-- Quali dubbi sono decisioni che doveva prendere l'utente e non l'AI? (tipo A)
-- Il vostro Claude ha avuto gli stessi dubbi del nostro? Se no, perché secondo voi?
-- In un progetto fatto a vibe coding, dove finiscono queste 36 decisioni?
-- Cosa bisognerebbe scrivere nei documenti perché il file `dati-di-prova/esempio.json` entri al primo colpo?
+
+- Quali dubbi erano decisioni che doveva prendere l'utente e non l'AI? (tipo A)
+- Assistenti diversi hanno avuto gli stessi dubbi? Se no, chi ha visto cosa?
+- La misura C34 è uguale tra le versioni (nella nostra è 579 px)? Se sì, perché la grafica si è potuta
+  riprodurre al pixel? Se no, quale decisione mancava nei documenti?
+- In un progetto fatto "a vibe coding", dove finiscono tutte queste decisioni prese in silenzio?
 
 ## Variante: prima e dopo
-Ripeti l'esperimento con i documenti **corretti** che stanno nella cartella principale del progetto
-(`SPEC.md`, `PIANO.md`, ...) e confronta il numero di dubbi.
+
+Rifate l'esperimento con `-Prova1`: sono i documenti della prima prova, **prima** di tutte le correzioni
+(senza grafica, senza AGENTS.md). Confrontate quanti e quali dubbi emergono rispetto ai documenti attuali.

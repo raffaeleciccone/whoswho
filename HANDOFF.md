@@ -29,12 +29,12 @@ Ultimo aggiornamento: 14/11/2026
 
 ## Prossimo passo: lunedì 16/11, incontro con il prof
 
-Fargli le domande di SPEC.md sezione 7:
-1. Lo scopo (ritrovare persone per nome, poi azienda/skill/evento) è quello che intendeva?
-2. LinkedIn: scraping (vietato dai termini LinkedIn) oppure il CSV dei collegamenti che LinkedIn
-   fa scaricare (niente foto né skill)?
-3. Ha parlato di CSV? Di cosa e con quali colonne? (nei 3 prompt incollati il CSV non c'è)
-4. Il suo sito eventi: indirizzo? Mostra partecipanti/speaker? Si può esportare in CSV?
+Tutto pronto in `incontro-prof/`: `DOMANDE-PROF.md` (da stampare o portare) e `PROMPT-DOPO-PROF.md`
+(da mandare all'assistente AI con le risposte).
+
+
+Le domande (5, compresa quella sul terzo container nginx) sono in SPEC.md sez. 7 e in
+`incontro-prof/DOMANDE-PROF.md`: tenere allineati i due elenchi.
 
 Con le risposte:
 - aggiornare SPEC.md (sezione 3b + criteri per i dati veri) e farla approvare

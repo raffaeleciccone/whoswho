@@ -6,6 +6,7 @@ e **con chi** è collegato. Python + MySQL + nginx in tre container Docker.
 Il progetto è sviluppato *by spec*:
 - [SPEC.md](SPEC.md): **cosa** fa il programma e i criteri per dire che funziona (C1, C2, ...)
 - [PIANO.md](PIANO.md): **come** è costruito, con il motivo di ogni scelta
+- [AGENTS.md](AGENTS.md): istruzioni per l'assistente AI (Claude Code, Antigravity, Cursor...); `CLAUDE.md` rimanda qui
 - `app/tests/`: un test automatico per ogni criterio della spec
 - [design/bozza.html](design/bozza.html): la bozza grafica approvata, riferimento per l'aspetto (C35)
 
@@ -83,16 +84,23 @@ alla fine viene stampato un resoconto con le persone scartate e perché.
 Le sorgenti LinkedIn e sito eventi (`app/whoswho/sorgenti/`) sono da completare:
 vedi le domande aperte in [SPEC.md](SPEC.md), sezione 7.
 
+## Incontro con il prof
+
+[incontro-prof/](incontro-prof/): le domande da fare al prof sulle fonti dei dati e il prompt pronto da
+mandare all'assistente AI con le sue risposte, per continuare il lavoro.
+
 ## Esperimento per la lezione
 
 [esperimento-ricostruzione/](esperimento-ricostruzione/): un Claude nuovo ha ricostruito il progetto
-leggendo **solo** questi documenti. Risultati, i punti in cui ha dovuto indovinare, e tutto il necessario
-per rifare l'esperimento in classe.
+leggendo **solo** questi documenti (tre prove). Risultati, i punti in cui ha dovuto indovinare, e tutto il
+necessario per rifare l'esperimento in classe, anche con altri assistenti AI come Antigravity.
 
 ## Cosa c'è dentro
 
 ```
 SPEC.md, PIANO.md     cosa e come
+AGENTS.md, CLAUDE.md  istruzioni per l'assistente AI (Claude Code, Antigravity...)
+incontro-prof/        domande per il prof + prompt pronto per continuare
 docker-compose.yml    tre container: web (nginx, porta 8000), app (Python 3.12, Flask), db (MySQL 8.4)
 nginx/default.conf    nginx: serve i file grafici e passa il resto ad app
 design/bozza.html     bozza grafica approvata (riferimento visivo)

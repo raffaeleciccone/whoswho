@@ -90,4 +90,4 @@ Seguendo il metodo: prima le decisioni dell'utente, poi spec, piano, test che fa
 Prossimo passo possibile: rifare l'esperimento con i documenti corretti e contare i dubbi.
 
 I documenti usati in questo esperimento, **prima** delle correzioni, sono in
-[per-la-classe/documenti/](per-la-classe/documenti/).
+[per-la-classe/documenti-prova-1/](per-la-classe/documenti-prova-1/).

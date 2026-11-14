@@ -1,6 +1,11 @@
-"""Misura del criterio C34 (SPEC sez. 5, PIANO sez. 4c). Serve l'app accesa e Google Chrome (o Edge).
+r"""Misura del criterio C34 (SPEC sez. 5, PIANO sez. 4c). Serve l'app accesa e Google Chrome (o Edge).
 
-    python strumenti/misura_c34.py
+    python strumenti/misura_c34.py                          # questo progetto
+    python strumenti/misura_c34.py C:\percorso\progetto     # un'altra copia (es. ricostruita in classe)
+    python strumenti/misura_c34.py C:\percorso\progetto 8001  # ... con la porta del sito
+
+La cartella indicata deve avere il suo docker-compose.yml e il comando
+`python -m whoswho.avvio scheda-tipica` (PIANO sez. 4c): se manca, anche questo è un risultato.
 
 1. chiede al container "app" l'HTML della scheda della persona tipica (database dei test);
 2. la apre in Chrome senza finestra, con il foglio di stile vero servito da nginx (localhost:8000);
@@ -15,9 +20,13 @@ import sys
 import tempfile
 from pathlib import Path
 
-RADICE = Path(__file__).resolve().parents[1]
+RADICE = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
+
+
 def _porta():
     """HOST_APP_PORT da variabile d'ambiente, poi dal file .env, altrimenti 8000."""
+    if len(sys.argv) > 2:
+        return sys.argv[2]
     if os.environ.get("HOST_APP_PORT"):
         return os.environ["HOST_APP_PORT"]
     env = RADICE / ".env"
@@ -61,6 +70,13 @@ def main():
                           cwd=RADICE, capture_output=True, text=True, encoding="utf-8").stdout
     if "<html" not in html:
         sys.exit("Non ho ricevuto la scheda dal container app: l'app è accesa?")
+    # senza il foglio di stile la misura non ha senso: controllo che il sito risponda
+    import urllib.request
+    try:
+        urllib.request.urlopen(f"http://localhost:{PORTA}/static/stile.css", timeout=5).read(1)
+    except Exception:
+        sys.exit(f"Il sito non risponde su http://localhost:{PORTA} (foglio di stile non trovato): "
+                 "avvialo con 'docker compose up -d' o indica la porta giusta.")
     html = html.replace("<head>", f'<head><base href="http://localhost:{PORTA}/">', 1)
     misura = ('<script>window.addEventListener("load",function(){'
               'var q=document.querySelector(".quattro").getBoundingClientRect();'

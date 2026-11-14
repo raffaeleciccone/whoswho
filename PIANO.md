@@ -150,7 +150,9 @@ che trasforma LinkedIn / sito eventi / CSV in questo formato.
 
 ```
 whoswho/
-├── SPEC.md, PIANO.md, README.md
+├── SPEC.md, PIANO.md, README.md, HANDOFF.md
+├── AGENTS.md, CLAUDE.md      # istruzioni per l'assistente AI (CLAUDE.md rimanda ad AGENTS.md)
+├── incontro-prof/            # domande per il prof + prompt per continuare
 ├── docker-compose.yml        # i tre container: web (nginx), app, db
 ├── nginx/default.conf        # nginx: /static/ dai file, il resto ad app:8000
 ├── design/bozza.html         # bozza grafica approvata (C35)
