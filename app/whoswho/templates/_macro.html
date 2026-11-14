@@ -1,0 +1,32 @@
+{% macro avatar(p, grande=false) -%}
+  {%- if p.foto -%}
+    <img class="avatar{{ ' grande' if grande }}" src="{{ p.foto }}" alt="">
+  {%- else -%}
+    <span class="avatar{{ ' grande' if grande }}" aria-hidden="true">{{ p.nome[:1] }}{{ p.cognome[:1] }}</span>
+  {%- endif -%}
+{%- endmacro %}
+
+{#- Griglia di schede persona: usata da risultati e da Persone -#}
+{% macro griglia_persone(elenco) -%}
+<div class="griglia">
+  {% for p in elenco %}
+  <a class="riquadro persona" href="{{ url_for('persona', persona_id=p.id) }}">
+    {{ avatar(p) }}
+    <span><strong>{{ p.nome }} {{ p.cognome }}</strong><br>
+      <span class="tenue">{{ p.professione or '' }}</span></span>
+  </a>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{#- Elenco eventi: usato da Home ed Eventi -#}
+{% macro lista_eventi(eventi) -%}
+<div class="riquadro">
+  <ul class="lista">
+    {% for ev in eventi %}
+    <li><a href="{{ url_for('cerca', tipo='evento', evento=ev.id) }}">{{ ev.nome }}</a>
+        <span class="tenue"> · {{ ev.data|data_it }}{% if ev.luogo %} · {{ ev.luogo }}{% endif %}</span></li>
+    {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}

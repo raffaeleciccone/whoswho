@@ -1,0 +1,65 @@
+{
+  "nota": "Persone INVENTATE per provare il programma. Formato: PIANO.md sezione 2.",
+  "persone": [
+    {
+      "nome": "Mario", "cognome": "Rossi", "professione": "Data Engineer",
+      "esperienze": [
+        {"azienda": "Accenture", "ruolo": "Consultant", "inizio": "2019-01", "fine": "2022-06"},
+        {"azienda": "Nexa Data", "ruolo": "Senior Data Engineer", "inizio": "2022-07"}
+      ],
+      "skill": ["Python", "SQL", "Docker", "Airflow"],
+      "eventi": [{"nome": "Data Summit 2026", "data": "2026-05-10", "luogo": "Milano", "note": "Parlato di pipeline dati e dbt"}]
+    },
+    {
+      "nome": "Luca", "cognome": "Bianchi", "professione": "Cloud Architect",
+      "esperienze": [
+        {"azienda": "Accenture", "ruolo": "Cloud Engineer", "inizio": "2021-03", "fine": "2024-01"},
+        {"azienda": "Orbita Cloud", "ruolo": "Cloud Architect", "inizio": "2024-02"}
+      ],
+      "skill": ["AWS", "Docker", "Kubernetes", "Terraform"],
+      "eventi": [{"nome": "Meetup DevOps Napoli", "data": "2026-03-21", "luogo": "Napoli"}]
+    },
+    {
+      "nome": "Giulia", "cognome": "Esposito", "professione": "Data Analyst",
+      "esperienze": [
+        {"azienda": "Accenture", "ruolo": "Analyst", "inizio": "2015-09", "fine": "2017-12"},
+        {"azienda": "Nexa Data", "ruolo": "BI Analyst", "inizio": "2023-01"}
+      ],
+      "skill": ["Power BI", "SQL", "Excel", "Python"],
+      "eventi": [{"nome": "Data Summit 2026", "data": "2026-05-10", "luogo": "Milano", "note": "Speaker sul talk di Power BI"}]
+    },
+    {
+      "nome": "Marco", "cognome": "Ricci", "professione": "Backend Developer",
+      "esperienze": [
+        {"azienda": "Orbita Cloud", "ruolo": "Backend Developer", "inizio": "2022-05"}
+      ],
+      "skill": ["Java", "Spring", "MySQL"],
+      "eventi": [{"nome": "Meetup DevOps Napoli", "data": "2026-03-21", "luogo": "Napoli", "note": "Cerca un DevOps per il suo team"}]
+    },
+    {
+      "nome": "Maria", "cognome": "Romano", "professione": "Product Manager",
+      "esperienze": [
+        {"azienda": "Nexa Data", "ruolo": "Product Manager", "inizio": "2021-10"}
+      ],
+      "skill": ["Product Management", "SQL"],
+      "eventi": [
+        {"nome": "Data Summit 2026", "data": "2026-05-10", "luogo": "Milano"},
+        {"nome": "PyCon Italia 2026", "data": "2026-05-28", "luogo": "Bologna"}
+      ]
+    },
+    {
+      "nome": "Andrea", "cognome": "Rossi", "professione": "Machine Learning Engineer",
+      "esperienze": [
+        {"azienda": "Lumen AI", "ruolo": "ML Engineer", "inizio": "2020-02"}
+      ],
+      "skill": ["Python", "PyTorch", "Docker"],
+      "eventi": [{"nome": "PyCon Italia 2026", "data": "2026-05-28", "luogo": "Bologna", "note": "Talk sul fine-tuning"}]
+    },
+    {
+      "nome": "Sara", "cognome": "Conti", "professione": "Frontend Developer",
+      "esperienze": [],
+      "skill": [],
+      "eventi": []
+    }
+  ]
+}

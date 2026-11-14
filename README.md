@@ -1,135 +1,95 @@
-# 👥 Who's Who - Professional Network & Relation Graph
+# Who's Who
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg?logo=python)](https://www.python.org/)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg?logo=docker)](https://www.docker.com/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1.svg?logo=mysql)](https://www.mysql.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+Ricordarsi chi si è conosciuto: **dove** l'ho incontrato, **dove** ha lavorato, **cosa** sa fare,
+e **con chi** è collegato. Python + MySQL in due container Docker.
 
-Applicazione containerizzata in **Python** e **MySQL** per la raccolta, gestione e correlazione di profili professionali, esperienze lavorative, competenze tecniche ed eventi di incontro.
+Il progetto è sviluppato *by spec*:
+- [SPEC.md](SPEC.md): **cosa** fa il programma e i criteri per dire che funziona (C1, C2, ...)
+- [PIANO.md](PIANO.md): **come** è costruito, con il motivo di ogni scelta
+- `app/tests/`: un test automatico per ogni criterio della spec
 
-I dati vengono acquisiti tramite moduli di **web scraping** e memorizzati in un database relazionale, con supporto a campi **JSON** per le competenze tecniche e un motore di inferenza per le **relazioni professionali**.
+## Avvio
 
----
-
-## 🏛️ Architettura di Sistema
-
-Il progetto è suddiviso in due container Docker distinti e orchestrati con **Docker Compose**:
-
-```
-+-------------------------------------------------------------------+
-|                          DOCKER COMPOSE                           |
-|                                                                   |
-|   +-----------------------+           +-----------------------+   |
-|   |   Container: app      |           |   Container: db       |   |
-|   |   (Python 3.11)       | --------> |   (MySQL 8.0)         |   |
-|   |                       |  Network  |                       |   |
-|   |   - Web Scraping      |           |   - Persistenza Dati  |   |
-|   |   - Parsing Dati      |           |   - Schema SQL        |   |
-|   |   - Motore Relazioni  |           |   - Healthcheck       |   |
-|   +-----------------------+           +-----------------------+   |
-|               |                                   |               |
-|               v                                   v               |
-|      Volume Locale (Codice)              Volume Docker (Dati)     |
-+-------------------------------------------------------------------+
-```
-
----
-
-## 📂 Struttura Attuale del Progetto
-
-```text
-whoswho/
-├── .env.example             # Template configurazione variabili d'ambiente
-├── .gitignore               # Regole di esclusione Git (sicurezza per credenziali e cache)
-├── README.md                # Documentazione del progetto
-└── SPECIFICHE.md            # Specifiche dettagliate dei dati, entità e campo JSON skill
-```
-
-I componenti applicativi (`docker-compose.yml`, `Dockerfile`, script di scraping e modelli) verranno implementati step-by-step partendo dalle specifiche.
-
----
-
-## 🚀 Avvio Rapido
-
-### 1. Prerequisiti
-* [Docker Desktop](https://www.docker.com/products/docker-desktop/) installato e avviato.
-* [Git](https://git-scm.com/) installato.
-
-### 2. Configurazione
-Crea il tuo file `.env` a partire dal template di esempio:
+Serve [Docker Desktop](https://www.docker.com/products/docker-desktop/) acceso.
 
 ```bash
-cp .env.example .env
+cp .env.example .env          # Windows PowerShell: Copy-Item .env.example .env
+docker compose up -d --build
 ```
-*(Su Windows PowerShell: `Copy-Item .env.example .env`)*
 
-Se necessario, modifica password e credenziali all'interno del file `.env`.
+Apri **http://localhost:8000**. Al primo avvio, se il database è vuoto, vengono caricate
+alcune persone inventate (`dati/esempio.json`) per provare.
 
-### 3. Avvio con Docker Compose
-Esegui il comando di build e avvio:
+Fermare: `docker compose down` · Cancellare anche i dati: `docker compose down -v`
+
+## Come si usa
+
+In alto, su **ogni pagina**, c'è la barra di navigazione:
+
+| Elemento | Cosa fa |
+|---|---|
+| **Who's Who** / **Home** | torna alla pagina iniziale |
+| **Persone** | elenco di tutte le persone, in ordine alfabetico |
+| **Eventi** | elenco di tutti gli eventi, dal più recente |
+| **Casella di ricerca** | scegli *Nome*, *Azienda* o *Skill*, scrivi e premi **Cerca** (il nome va bene anche a pezzi: "Mar" trova Marco e Maria) |
+
+Le pagine:
+
+| Pagina | Indirizzo | Cosa trovi |
+|---|---|---|
+| Home | `/` | spiegazione e ultimi eventi |
+| Persone | `/persone` | tutte le persone; clic su una → scheda |
+| Eventi | `/eventi` | tutti gli eventi; clic su uno → chi ho incontrato lì |
+| Risultati | `/cerca` | le persone trovate dalla ricerca |
+| Scheda | `/persona/<id>` | eventi, aziende, skill, persone collegate, collegamenti a mano |
+
+Per muoversi:
+- **← Indietro** (sotto la barra, su tutte le pagine tranne la Home) torna alla pagina di prima.
+- Nella **scheda** quasi tutto è cliccabile: un evento, un'azienda o una skill
+  aprono la ricerca corrispondente; una persona collegata apre la sua scheda.
+- In fondo alla scheda, **‹ Precedente** e **Successiva ›** scorrono le persone in ordine alfabetico.
+
+## Test
 
 ```bash
-docker compose up --build
+docker compose run --rm app pytest -v
 ```
 
-Il sistema:
-1. Avvierà il container **MySQL** e attenderà che sia pronto (healthcheck).
-2. Avvierà il container **Python**, si connetterà al DB e creerà automaticamente tutte le tabelle.
-3. Eseguirà il test dimostrativo con inserimento dati e stampa a video.
+I test usano un database separato (`whoswho_test`), non toccano i dati veri.
 
-Per arrestare i container:
-```bash
-docker compose down
-```
+## Importare dati
 
-Per cancellare anche i volumi dati:
-```bash
-docker compose down -v
-```
-
----
-
-## 📊 Modello dei Dati
-
-Le entità principali mappate nel database sono:
-- **`persone`**: Dati anagrafici, professione, foto e campo nativo `skill_tecniche` (JSON).
-- **`aziende`**: Aziende e organizzazioni.
-- **`esperienze_lavorative`**: Storico lavorativo (relazione molti-a-molti con date e ruoli).
-- **`eventi`**: Conferenze, meetup o occasioni d'incontro.
-- **`persona_evento`**: Dettagli su dove e come si è incontrata ogni persona.
-- **`relazioni_professionali`**: Collegamenti diretti o inferiti tra persone (colleghi, collaborazioni).
-
-Tutti i dettagli approfonditi sono consultabili in [SPECIFICHE.md](SPECIFICHE.md).
-
----
-
-## 📤 Come Pubblicare la Cartella su GitHub
-
-Se desideri pubblicare questo progetto su GitHub come repository autonoma:
+Ogni sorgente produce persone nel formato descritto in [PIANO.md](PIANO.md) (sezione 2).
+Un file JSON in quel formato si importa così:
 
 ```bash
-# 1. Posizionati nella cartella del progetto
-cd whoswho
-
-# 2. Inizializza la repository Git (se non già presente)
-git init
-
-# 3. Aggiungi tutti i file e fai il primo commit
-git add .
-git commit -m "feat: initial commit - Dockerized Python & MySQL Who's Who setup"
-
-# 4. Rinomina il branch in main
-git branch -M main
-
-# 5. Collega il tuo repository remoto su GitHub (crealo prima su github.com)
-git remote add origin https://github.com/<TUO-UTENTE-GITHUB>/<NOME-REPO>.git
-
-# 6. Effettua il push
-git push -u origin main
+docker compose run --rm app python -m whoswho.avvio importa /dati/mio-file.json
 ```
+Il file va messo nella cartella `dati/`. In **Git Bash su Windows** scrivi `MSYS_NO_PATHCONV=1` davanti
+al comando (altrimenti Git Bash cambia il percorso `/dati/...`).
 
----
+Regole dell'import (dettagli in SPEC.md, D4-D7): due persone sono la stessa se hanno lo stesso profilo,
+oppure stesso nome e cognome e almeno una senza profilo; reimportare aggiorna ma non cancella mai;
+alla fine viene stampato un resoconto con le persone scartate e perché.
 
-## 📄 Licenza
+Le sorgenti LinkedIn e sito eventi (`app/whoswho/sorgenti/`) sono da completare:
+vedi le domande aperte in [SPEC.md](SPEC.md), sezione 7.
 
-Progetto rilasciato per scopi didattici e di sviluppo open-source.
+## Esperimento per la lezione
+
+[esperimento-ricostruzione/](esperimento-ricostruzione/): un Claude nuovo ha ricostruito il progetto
+leggendo **solo** questi documenti. Risultati, i punti in cui ha dovuto indovinare, e tutto il necessario
+per rifare l'esperimento in classe.
+
+## Cosa c'è dentro
+
+```
+SPEC.md, PIANO.md     cosa e come
+docker-compose.yml    container db (MySQL 8.4) + app (Python 3.12, Flask)
+db/                   script che crea il database dei test
+dati/esempio.json     persone inventate di prova
+app/whoswho/          codice: importa.py (porta d'ingresso), ricerche.py, web.py
+app/whoswho/templates/  pagine HTML: base.html (barra su tutte le pagine), home, persone, eventi, risultati, persona
+app/tests/            test dei criteri della spec
+esperimento-ricostruzione/  esperimento "ricostruire dai soli documenti" (per la lezione)
+```

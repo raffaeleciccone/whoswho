@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% from "_macro.html" import avatar %}
+{% block titolo %}{{ p.nome }} {{ p.cognome }} · Who's Who{% endblock %}
+{% block contenuto %}
+<div class="testa">
+  {{ avatar(p, grande=true) }}
+  <div>
+    <h1>{{ p.nome }} {{ p.cognome }}</h1>
+    <div class="tenue">{{ p.professione or '' }}</div>
+    {% if p.profilo_url %}<a href="{{ p.profilo_url }}" target="_blank" rel="noopener">Profilo online</a>{% endif %}
+  </div>
+</div>
+
+<h2>Dove l'ho incontrato/a</h2>
+<div class="riquadro">
+  {% if p.eventi %}
+  <ul class="lista">
+    {% for ev in p.eventi %}
+    <li><a href="{{ url_for('cerca', tipo='evento', evento=ev.id) }}">{{ ev.nome }}</a>
+      <span class="tenue"> · {{ ev.data|data_it }}{% if ev.luogo %} · {{ ev.luogo }}{% endif %}</span>
+      {% if ev.note %}<div>{{ ev.note }}</div>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% else %}<p class="vuoto">nessuno</p>{% endif %}
+</div>
+
+<h2>Dove ha lavorato</h2>
+<div class="riquadro">
+  {% if p.esperienze %}
+  <ul class="lista">
+    {% for e in p.esperienze %}
+    <li><a href="{{ url_for('cerca', tipo='azienda', q=e.azienda) }}"><strong>{{ e.azienda }}</strong></a>
+      {% if e.ruolo %} · {{ e.ruolo }}{% endif %}
+      <span class="tenue"> · {{ e.inizio|mese_anno }} – {{ e.fine|mese_anno if e.fine else 'oggi' }}</span></li>
+    {% endfor %}
+  </ul>
+  {% else %}<p class="vuoto">nessuno</p>{% endif %}
+</div>
+
+<h2>Cosa sa fare</h2>
+<div class="riquadro">
+  {% if p.skill %}
+  <ul class="etichette">
+    {% for s in p.skill %}<li><a href="{{ url_for('cerca', tipo='skill', q=s) }}">{{ s }}</a></li>{% endfor %}
+  </ul>
+  {% else %}<p class="vuoto">nessuno</p>{% endif %}
+</div>
+
+<h2>Persone collegate</h2>
+<div class="tre-colonne">
+  <div class="riquadro">
+    <strong>Colleghi</strong>
+    {% if p.colleghi %}
+    <ul class="lista">{% for c in p.colleghi %}
+      <li><a href="{{ url_for('persona', persona_id=c.id) }}">{{ c.nome }} {{ c.cognome }}</a>
+        <div class="tenue">{{ c.dettaglio }}</div></li>{% endfor %}</ul>
+    {% else %}<p class="vuoto">nessuno</p>{% endif %}
+  </div>
+  <div class="riquadro">
+    <strong>Conosciuti allo stesso evento</strong>
+    {% if p.stesso_evento %}
+    <ul class="lista">{% for c in p.stesso_evento %}
+      <li><a href="{{ url_for('persona', persona_id=c.id) }}">{{ c.nome }} {{ c.cognome }}</a>
+        <div class="tenue">{{ c.dettaglio }}</div></li>{% endfor %}</ul>
+    {% else %}<p class="vuoto">nessuno</p>{% endif %}
+  </div>
+  <div class="riquadro">
+    <strong>Collegamenti a mano</strong>
+    {% if p.a_mano %}
+    <ul class="lista">{% for c in p.a_mano %}
+      <li><a href="{{ url_for('persona', persona_id=c.id) }}">{{ c.nome }} {{ c.cognome }}</a>
+        <div class="tenue">{{ c.descrizione }}</div>
+        <form method="post" action="{{ url_for('elimina_collegamento', persona_id=p.id, collegamento_id=c.collegamento_id) }}">
+          <button class="secondario" type="submit">Elimina</button>
+        </form></li>{% endfor %}</ul>
+    {% else %}<p class="vuoto">nessuno</p>{% endif %}
+  </div>
+</div>
+
+<h2>Aggiungi un collegamento</h2>
+<div class="riquadro">
+  <form class="ricerca" method="post" action="{{ url_for('aggiungi_collegamento', persona_id=p.id) }}">
+    <select name="altra_persona" aria-label="Persona da collegare" required>
+      <option value="">Scegli una persona…</option>
+      {% for a in altre %}<option value="{{ a.id }}">{{ a.cognome }} {{ a.nome }}</option>{% endfor %}
+    </select>
+    <input type="text" name="descrizione" placeholder="es. {{ p.nome }} è il capo di…" required>
+    <button type="submit">Aggiungi</button>
+  </form>
+</div>
+
+{#- Scorrere le persone in ordine alfabetico (F8, C17) -#}
+<nav class="scorri" aria-label="Scorri le persone">
+  <span>{% if precedente %}<a href="{{ url_for('persona', persona_id=precedente.id) }}">‹ Precedente: {{ precedente.nome }} {{ precedente.cognome }}</a>{% endif %}</span>
+  <span>{% if successiva %}<a href="{{ url_for('persona', persona_id=successiva.id) }}">Successiva: {{ successiva.nome }} {{ successiva.cognome }} ›</a>{% endif %}</span>
+</nav>
+{% endblock %}

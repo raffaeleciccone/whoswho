@@ -1,0 +1,42 @@
+# Who's Who — HANDOFF
+
+Ultimo aggiornamento: 14/11/2026
+
+## Stato
+
+- **SPEC.md approvata** (F1-F8, criteri C1-C28, regole import D4-D7), tranne le fonti dati D1-D2, che aspettano il prof.
+- **Programma funzionante** su http://localhost:8000 con persone inventate di esempio:
+  ricerca per nome (anche a pezzi) / azienda / skill / evento, scheda persona, persone collegate
+  (colleghi, stesso evento, collegamenti a mano), barra di navigazione, Indietro, Precedente/Successiva.
+- **44 test, tutti verdi** (`docker compose run --rm app pytest -q`).
+  Verificato che i test se ne accorgono se si rompe una regola (provato su C8, C22, C25, C26, C27, C28).
+- **Esperimento di ricostruzione fatto** (`esperimento-ricostruzione/`): un Claude nuovo ha rifatto
+  il progetto dai soli .md; i suoi 36 dubbi hanno portato a: regola "stessa persona" (D4-D5, C18-C20),
+  niente collegamenti doppi (C22), formato del file di import e dettagli tecnici in PIANO.md sez. 2 e 3b.
+- **Non ancora su GitHub**: tutto il lavoro del 14/11 è solo in locale, nessun commit.
+  `SPECIFICHE.md` è stato rimosso (il contenuto ora è in PIANO.md).
+
+## Prossimo passo: lunedì 16/11, incontro con il prof
+
+Fargli le domande di SPEC.md sezione 7:
+1. Lo scopo (ritrovare persone per nome, poi azienda/skill/evento) è quello che intendeva?
+2. LinkedIn: scraping (vietato dai termini LinkedIn) oppure il CSV dei collegamenti che LinkedIn
+   fa scaricare (niente foto né skill)?
+3. Ha parlato di CSV? Di cosa e con quali colonne? (nei 3 prompt incollati il CSV non c'è)
+4. Il suo sito eventi: indirizzo? Mostra partecipanti/speaker? Si può esportare in CSV?
+
+Con le risposte:
+- aggiornare SPEC.md (sezione 3b + criteri per i dati veri) e farla approvare
+- scrivere `app/whoswho/sorgenti/linkedin.py` e `eventi_prof.py` (oggi vuoti) che producono
+  il formato di PIANO.md sez. 2; il resto del programma non si tocca
+- test sulle nuove sorgenti, poi prova con dati veri
+
+## Da decidere con l'utente
+
+- Commit + push su GitHub del lavoro del 14/11.
+- Skill personale `spec-coding` (bozza del 14/11 in `~/.claude/skills/spec-coding/`): l'utente vuole
+  rifarla bene in una conversazione dedicata, per lavorare sempre così su tutti i progetti.
+- Prova 2 dell'esperimento fatta (`esperimento-ricostruzione/prova-2/`): prova decisiva passata.
+  I 5 punti emersi sono stati decisi con l'utente e corretti (C17 riscritto, C25-C28); vedi prova-2/RISULTATI.md.
+- Versioni ricostruite in `C:\dev\whoswho-ricostruito` (prova 2) e `...-prova1` (fuori dal repo; container prova 2 su 8001/3308
+  ancora accesi): spegnere con `docker compose down` in quella cartella quando non serve più.

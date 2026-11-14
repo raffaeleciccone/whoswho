@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titolo %}Who's Who{% endblock %}</title>
+<style>
+  :root {
+    --sfondo: #f6f5f2; --carta: #ffffff; --testo: #1d1d1b; --tenue: #6b6a66;
+    --bordo: #e2e0da; --accento: #2f5d8a; --accento-tenue: #e6eef6; --errore: #a33a2b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --sfondo: #161615; --carta: #20201f; --testo: #ecebe7; --tenue: #a09f9a;
+      --bordo: #34332f; --accento: #8db6de; --accento-tenue: #1f2b38; --errore: #e08a7c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--sfondo); color: var(--testo);
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: var(--accento); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header { border-bottom: 1px solid var(--bordo); background: var(--carta); }
+  header .contenitore { display: flex; align-items: baseline; gap: 1rem; padding-block: .9rem; }
+  header a.logo { font-weight: 700; font-size: 1.15rem; color: var(--testo); }
+  header span { color: var(--tenue); font-size: .9rem; }
+  .contenitore { max-width: 880px; margin: 0 auto; padding-inline: 16px; }
+  main { padding-block: 1.5rem 3rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.05rem; margin: 1.75rem 0 .6rem; color: var(--tenue);
+       text-transform: uppercase; letter-spacing: .04em; }
+  .riquadro { background: var(--carta); border: 1px solid var(--bordo); border-radius: 10px; padding: 1rem 1.1rem; }
+  form.ricerca { display: flex; flex-wrap: wrap; gap: .5rem; }
+  input, select, button { font: inherit; color: inherit; background: var(--carta);
+       border: 1px solid var(--bordo); border-radius: 8px; padding: .55rem .7rem; }
+  input[type=text] { flex: 1 1 220px; min-width: 0; }
+  button { background: var(--accento); color: var(--carta); border-color: var(--accento); cursor: pointer; font-weight: 600; }
+  button.secondario { background: transparent; color: var(--errore); border-color: transparent; padding: .2rem .4rem; font-weight: 400; }
+  .griglia { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .75rem; }
+  .persona { display: flex; gap: .75rem; align-items: center; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; flex: none; object-fit: cover;
+            display: grid; place-items: center; background: var(--accento-tenue); color: var(--accento); font-weight: 700; }
+  .avatar.grande { width: 96px; height: 96px; font-size: 2rem; }
+  .tenue { color: var(--tenue); }
+  .vuoto { color: var(--tenue); font-style: italic; }
+  .etichette { display: flex; flex-wrap: wrap; gap: .4rem; padding: 0; margin: 0; list-style: none; }
+  .etichette a { display: inline-block; padding: .15rem .6rem; border-radius: 999px;
+                 background: var(--accento-tenue); font-size: .9rem; }
+  ul.lista { list-style: none; padding: 0; margin: 0; }
+  ul.lista li { padding: .5rem 0; border-bottom: 1px solid var(--bordo); }
+  ul.lista li:last-child { border-bottom: 0; }
+  .avviso { padding: .6rem .9rem; border-radius: 8px; background: var(--accento-tenue); margin-bottom: 1rem; }
+  .avviso.errore { color: var(--errore); }
+  .testa { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+  /* barra di navigazione */
+  nav.barra { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.25rem; padding-block: .7rem; }
+  nav.barra .menu { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+  nav.barra .menu a { display: block; padding: .35rem .7rem; border-radius: 8px; color: var(--testo); }
+  nav.barra .menu a:hover { background: var(--accento-tenue); text-decoration: none; }
+  nav.barra .menu a[aria-current=page] { background: var(--accento-tenue); color: var(--accento); font-weight: 600; }
+  nav.barra form.ricerca { flex: 1 1 320px; }
+  nav.barra form.ricerca select, nav.barra form.ricerca input, nav.barra form.ricerca button { padding: .4rem .6rem; }
+  a.indietro { display: inline-block; margin-bottom: 1rem; color: var(--tenue); }
+  .scorri { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem;
+            padding-top: 1rem; border-top: 1px solid var(--bordo); }
+  .scorri a { padding: .45rem .8rem; border: 1px solid var(--bordo); border-radius: 8px; background: var(--carta); }
+  .tre-colonne { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .75rem; }
+</style>
+</head>
+<body>
+{#- Barra di navigazione: compare su tutte le pagine (SPEC F8, criterio C14) -#}
+<header>
+  <nav class="barra contenitore" aria-label="Navigazione">
+    <a class="logo" href="{{ url_for('home') }}">Who's Who</a>
+    <ul class="menu">
+      <li><a href="{{ url_for('home') }}" {{ 'aria-current=page' if request.endpoint == 'home' }}>Home</a></li>
+      <li><a href="{{ url_for('persone') }}" {{ 'aria-current=page' if request.endpoint == 'persone' }}>Persone</a></li>
+      <li><a href="{{ url_for('eventi') }}" {{ 'aria-current=page' if request.endpoint == 'eventi' }}>Eventi</a></li>
+    </ul>
+    {%- set tipo_attuale = request.args.get('tipo', 'nome') %}
+    <form class="ricerca" action="{{ url_for('cerca') }}" method="get" role="search">
+      <select name="tipo" aria-label="Cerca per">
+        {% for chiave, etichetta in tipi.items() %}
+        <option value="{{ chiave }}" {{ 'selected' if chiave == tipo_attuale }}>{{ etichetta }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="q" aria-label="Testo da cercare" placeholder="Cerca…"
+             value="{{ request.args.get('q', '') if request.endpoint == 'cerca' }}"
+             list="skill-note" {{ 'autofocus' if request.endpoint == 'home' }}>
+      <button type="submit">Cerca</button>
+    </form>
+    <datalist id="skill-note">{% for s in skill_note %}<option value="{{ s }}">{% endfor %}</datalist>
+  </nav>
+</header>
+<main class="contenitore">
+  {#- "Indietro" su tutte le pagine tranne la Home (C15). Senza cronologia porta alla Home. -#}
+  {% if request.endpoint != 'home' %}
+  <a class="indietro" href="{{ url_for('home') }}"
+     onclick="if (history.length > 1) { history.back(); return false; }">← Indietro</a>
+  {% endif %}
+  {% with messaggi = get_flashed_messages(with_categories=true) %}
+    {% for categoria, m in messaggi %}<div class="avviso {{ categoria }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block contenuto %}{% endblock %}
+</main>
+</body>
+</html>

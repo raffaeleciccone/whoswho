@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    volumes:
+      - db_dati:/var/lib/mysql
+      - ./db/crea-db-test.sh:/docker-entrypoint-initdb.d/crea-db-test.sh:ro
+    ports:
+      - "${HOST_MYSQL_PORT:-3307}:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    build: ./app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./app:/app
+      - ./dati:/dati:ro
+    ports:
+      - "${HOST_APP_PORT:-8000}:8000"
+    command: ["python", "-m", "whoswho.avvio", "avvia"]
+
+volumes:
+  db_dati:
