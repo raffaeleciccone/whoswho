@@ -13,8 +13,7 @@ Ultimo aggiornamento: 14/11/2026
 - **Esperimento di ricostruzione fatto** (`esperimento-ricostruzione/`): un Claude nuovo ha rifatto
   il progetto dai soli .md; i suoi 36 dubbi hanno portato a: regola "stessa persona" (D4-D5, C18-C20),
   niente collegamenti doppi (C22), formato del file di import e dettagli tecnici in PIANO.md sez. 2 e 3b.
-- **Non ancora su GitHub**: tutto il lavoro del 14/11 è solo in locale, nessun commit.
-  `SPECIFICHE.md` è stato rimosso (il contenuto ora è in PIANO.md).
+- **Su GitHub**: github.com/raffaeleciccone/whoswho (account raffaeleciccone).
 
 ## Grafica (14/11, fatta in SDD)
 - SPEC sez. 3c (F9, C29-C38): tutte le decisioni prese dall'utente una alla volta (disposizione, testata,
