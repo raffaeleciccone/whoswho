@@ -27,6 +27,11 @@ Ultimo aggiornamento: 14/11/2026
 - GitHub: il repo va SOLO sull'account raffaeleciccone. Su questo PC gh ha due account; per il push:
   `gh auth switch -u raffaeleciccone` (poi si può tornare a raffaeleciccone-analyst).
 
+## Kit per la classe (15/11)
+- `kit-ricostruzione/`: cartella unica per i compagni (LEGGIMI, PROMPT, STRUMENTI, VERIFICA, misura_c34.py,
+  dati-di-prova, progetto/ con i soli documenti). Le copie si aggiornano con `python strumenti/aggiorna_kit.py`
+  (`--controlla` prima di ogni commit). Antigravity non ancora provato.
+
 ## Prossimo passo: lunedì 16/11, incontro con il prof
 
 Tutto pronto in `incontro-prof/`: `DOMANDE-PROF.md` (da stampare o portare) e `PROMPT-DOPO-PROF.md`

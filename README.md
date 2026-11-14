@@ -91,6 +91,9 @@ mandare all'assistente AI con le sue risposte, per continuare il lavoro.
 
 ## Esperimento per la lezione
 
+**Per rifarlo in classe basta la cartella [kit-ricostruzione/](kit-ricostruzione/)** (istruzioni in
+[LEGGIMI.md](kit-ricostruzione/LEGGIMI.md)): documenti, prompt, verifica e misura, per Claude Code, Antigravity o altri.
+
 [esperimento-ricostruzione/](esperimento-ricostruzione/): un Claude nuovo ha ricostruito il progetto
 leggendo **solo** questi documenti (tre prove). Risultati, i punti in cui ha dovuto indovinare, e tutto il
 necessario per rifare l'esperimento in classe, anche con altri assistenti AI come Antigravity.
@@ -101,10 +104,11 @@ necessario per rifare l'esperimento in classe, anche con altri assistenti AI com
 SPEC.md, PIANO.md     cosa e come
 AGENTS.md, CLAUDE.md  istruzioni per l'assistente AI (Claude Code, Antigravity...)
 incontro-prof/        domande per il prof + prompt pronto per continuare
+kit-ricostruzione/    kit per la classe: ricostruire il progetto dai soli documenti (copie aggiornate da strumenti/aggiorna_kit.py)
 docker-compose.yml    tre container: web (nginx, porta 8000), app (Python 3.12, Flask), db (MySQL 8.4)
 nginx/default.conf    nginx: serve i file grafici e passa il resto ad app
 design/bozza.html     bozza grafica approvata (riferimento visivo)
-strumenti/            misura_c34.py: misura con Chrome che la scheda stia nello schermo
+strumenti/            misura_c34.py (misura C34 con Chrome), aggiorna_kit.py (allinea il kit ai documenti)
 db/                   script che crea il database dei test
 dati/esempio.json     persone inventate di prova
 app/whoswho/          codice: importa.py (porta d'ingresso), ricerche.py, web.py

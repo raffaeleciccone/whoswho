@@ -20,7 +20,13 @@ import sys
 import tempfile
 from pathlib import Path
 
-RADICE = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
+_QUI = Path(__file__).resolve().parent
+if len(sys.argv) > 1:
+    RADICE = Path(sys.argv[1]).resolve()
+elif (_QUI / "progetto").is_dir():      # lanciato dal kit-ricostruzione: misura la cartella progetto/
+    RADICE = _QUI / "progetto"
+else:                                   # lanciato da strumenti/ del progetto originale
+    RADICE = _QUI.parent
 
 
 def _porta():
@@ -66,6 +72,10 @@ def titolo(chrome, file, larghezza, altezza):
 
 
 def main():
+    # senza docker-compose.yml qui, Docker cercherebbe nelle cartelle superiori e misurerebbe
+    # un altro progetto (per esempio l'originale, se il kit è dentro il repository)
+    if not (RADICE / "docker-compose.yml").exists():
+        sys.exit(f"In {RADICE} non c'è ancora un programma (manca docker-compose.yml): niente da misurare.")
     html = subprocess.run(["docker", "compose", "run", "--rm", "-T", "app", "python", "-m", "whoswho.avvio", "scheda-tipica"],
                           cwd=RADICE, capture_output=True, text=True, encoding="utf-8").stdout
     if "<html" not in html:

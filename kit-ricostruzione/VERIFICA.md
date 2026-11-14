@@ -1,18 +1,18 @@
 # Verifica della versione ricostruita
 
-Sostituisci `8000` con la porta usata dalla versione ricostruita.
+I comandi `docker compose ...` si danno dalla cartella `progetto/`, dove l'assistente ha ricostruito il
+programma. Sostituisci `8000` con la porta usata, se l'hai cambiata.
 I risultati attesi sono stati controllati sulla versione originale, con i dati di
 [dati-di-prova/esempio.json](dati-di-prova/esempio.json) (persone inventate).
 
 ## 1. Funziona?
 - [ ] `docker compose run --rm app pytest -q` → tutti i test passano
 - [ ] il sito si apre nel browser
-- [ ] (documenti attuali) ci sono tre container: `docker compose ps` mostra web (nginx), app, db
+- [ ] ci sono tre container: `docker compose ps` mostra web (nginx), app, db
 
 ## 2. La prova decisiva: i nostri dati entrano?
 
-Copia `dati-di-prova/esempio.json` nella cartella `dati/` della versione ricostruita e importalo con il
-comando del suo README (di solito `docker compose run --rm app python -m whoswho.avvio importa /dati/esempio.json`;
+Copia `dati-di-prova/esempio.json` nella cartella `progetto/dati/` e importalo con il comando del README (di solito `docker compose run --rm app python -m whoswho.avvio importa /dati/esempio.json`;
 in Git Bash su Windows metti `MSYS_NO_PATHCONV=1` davanti).
 
 - [ ] le 7 persone entrano senza modificare il file
@@ -21,13 +21,15 @@ in Git Bash su Windows metti `MSYS_NO_PATHCONV=1` davanti).
 
 Se qualcosa fallisce: quale documento non diceva abbastanza?
 
-## 3. La misura C34 (solo documenti attuali)
+## 3. La misura C34
 
-Dalla cartella del progetto originale, con la versione ricostruita accesa:
+Dalla cartella del kit (quella che contiene `progetto/`), con il programma acceso:
 
 ```
-python strumenti/misura_c34.py C:\lezione\ricostruito 8000
+python misura_c34.py
 ```
+
+Se hai cambiato porta: `python misura_c34.py progetto 8001`.
 
 - [ ] "C34: RISPETTATO" (la nostra versione: la scheda finisce a 579 px su 650)
 - [ ] se dice che manca il comando `scheda-tipica`: la versione ricostruita non ha seguito PIANO sez. 4c

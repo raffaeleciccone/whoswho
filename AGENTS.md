@@ -36,6 +36,10 @@ SPEC.md è la fonte di verità. Se il codice o il piano la contraddicono, vince 
    se ne accorga, ripristina.
 7. **Prova il programma vero** (non solo i test) e aprilo all'utente nel browser.
 8. **Documenta**: SPEC.md (stato), PIANO.md, README.md (solo cose che esistono davvero), HANDOFF.md.
+   Quando cambia una decisione, cerca **tutti** i punti dei documenti che la citano (lezione della prova 3).
+9. **Aggiorna il kit**: `kit-ricostruzione/` contiene copie dei documenti per la classe. Dopo ogni modifica
+   ai documenti, alla bozza, a `strumenti/misura_c34.py` o a `dati/esempio.json` esegui `python strumenti/aggiorna_kit.py`
+   (e `--controlla` prima di un commit).
 
 ## Comandi
 

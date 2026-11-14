@@ -153,10 +153,12 @@ whoswho/
 ├── SPEC.md, PIANO.md, README.md, HANDOFF.md
 ├── AGENTS.md, CLAUDE.md      # istruzioni per l'assistente AI (CLAUDE.md rimanda ad AGENTS.md)
 ├── incontro-prof/            # domande per il prof + prompt per continuare
+├── kit-ricostruzione/        # kit per la classe (copie dei documenti, aggiornate da strumenti/aggiorna_kit.py)
 ├── docker-compose.yml        # i tre container: web (nginx), app, db
 ├── nginx/default.conf        # nginx: /static/ dai file, il resto ad app:8000
 ├── design/bozza.html         # bozza grafica approvata (C35)
 ├── strumenti/misura_c34.py   # misura C34 con Chrome
+├── strumenti/aggiorna_kit.py # allinea kit-ricostruzione/ ai documenti (--controlla per verificare)
 ├── .env.example              # password e porte (copiare in .env)
 ├── db/crea-db-test.sh        # crea il database separato per i test
 ├── dati/esempio.json         # persone finte per provare
