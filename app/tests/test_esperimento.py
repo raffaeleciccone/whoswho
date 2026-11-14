@@ -181,3 +181,16 @@ def test_c28_ricerca_vuota(conn, client_per):
             html = client.get("/cerca", query_string={"tipo": tipo, "q": q}).get_data(as_text=True)
             assert "Scrivi qualcosa da cercare." in html, (tipo, q)
             assert "Nessun risultato" not in html, (tipo, q)
+
+
+# ---------- C39: fine scritta male -> esperienza ignorata (niente colleghi falsi) ----------
+def test_c39_fine_non_valida_ignora_il_lavoro(conn):
+    res = importa_persone(conn, [
+        persona("Mario", "Rossi", esperienze=[esp("Accenture", "2015", "2017-13"), esp("Nexa Data", "2018")]),
+        persona("Luca", "Bianchi", esperienze=[esp("Accenture", "2024")]),
+    ])
+    assert res.importate == 2
+    assert any("ignorat" in a and "Accenture" in a for a in res.avvisi), res.avvisi
+    mario = _persone(conn)[0]["id"]
+    assert ricerche.colleghi(conn, mario) == []
+    assert [e["azienda"] for e in ricerche.scheda(conn, mario)["esperienze"]] == ["Nexa Data"]

@@ -38,7 +38,8 @@ dove le ho incontrate, dove hanno lavorato, cosa sanno fare.
   - "Home", "Persone" (elenco di tutte), "Eventi" (elenco di tutti)
   - la casella di ricerca (nome / azienda / skill), così cerco da qualsiasi pagina
   - il tasto "Indietro" (con la freccia ←) su tutte le pagine tranne la Home
-  - nella scheda: "‹ Precedente" e "Successiva ›" per scorrere le persone in ordine alfabetico
+  - nella scheda: i tasti "Precedente: <nome>" e "Successiva: <nome>" (con le frecce, come nella bozza)
+    per scorrere le persone in ordine alfabetico
 
 ## 3c. Aspetto grafico (F9) — bozza approvata dall'utente il 14/11: design/bozza.html
 Chi la vede, in ordine di importanza:
@@ -178,6 +179,9 @@ Aggiunti il 14/11 dopo l'esperimento di ricostruzione (vedi esperimento-ricostru
   hanno ognuno un'icona.
 - C38 (F9) [a vista]. I tasti principali hanno sfumatura e rilievo e si abbassano quando premuti; Elimina è a
   contorno rosso; come nella bozza approvata.
+- C39 (D7, decisa dall'utente dopo la prova 4). Importo Mario Rossi con un lavoro in Accenture dal "2015" con
+  fine scritta male ("2017-13") e Luca Bianchi in Accenture dal "2024": quel lavoro di Mario viene ignorato e
+  segnalato nel resoconto; Mario entra lo stesso, ma non risulta collega di Luca.
 - C24 (F8). Ordine alfabetico: maiuscole e accenti non contano ("éboli" sta tra "Bianchi" ed "Esposito").
 
 ## 6. Vincoli (richiesti dal prof)

@@ -140,10 +140,15 @@ def _importa_una(cur, p: dict, res: Resoconto, etichetta: str) -> None:
         if not azienda:
             res.avvisi.append(f"{etichetta}: esperienza senza azienda, ignorata")
             continue
+        fine = leggi_data(e.get("fine"), res.avvisi, etichetta, fine=True)
+        if fine is None and pulisci(e.get("fine")):
+            # C39: fine scritta ma non valida -> l'esperienza si ignora, altrimenti
+            # "fine vuota" vorrebbe dire "ci lavora ancora" e creerebbe colleghi falsi
+            res.avvisi.append(f"{etichetta}: lavoro in {azienda} ignorato (data di fine non valida)")
+            continue
         azienda_id = _id_o_inserisci(cur, "aziende", azienda)
         ruolo = pulisci(e.get("ruolo"))
         inizio = leggi_data(e.get("inizio"), res.avvisi, etichetta)
-        fine = leggi_data(e.get("fine"), res.avvisi, etichetta, fine=True)
         # "<=>" confronta anche i NULL: evita doppioni quando manca la data (C12)
         cur.execute(
             """SELECT id FROM esperienze

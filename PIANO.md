@@ -63,6 +63,8 @@ Regole dei campi:
   (`2019` → 1/1/2019, `2022-03` → 1/3/2022); per la **fine** di un'esperienza l'**ultimo**
   (`2022` → 31/12/2022, `2022-06` → 30/6/2022).
   Una data non valida diventa vuota e finisce negli avvisi; la persona entra lo stesso.
+  **Eccezione, la fine di un'esperienza** (SPEC C39): se è scritta ma non valida, l'esperienza intera viene
+  ignorata (con avviso), perché "fine vuota" vorrebbe dire "ci lavora ancora" e creerebbe colleghi falsi.
 - Esperienza senza `azienda` o evento senza `nome`: ignorati con un avviso.
 - Relazioni (nel codice "collegamenti"): non fanno parte dell'import (si scrivono solo dalla pagina, F7).
 
@@ -211,6 +213,10 @@ Riferimento: **`design/bozza.html`**, la bozza approvata dall'utente (C35). Le p
   | `--rosso` | `#b42318` | tasto Elimina |
   | `--tasto-alto` / `--tasto-basso` | `#2f4a73` / `#1a2c47` | sfumatura dei tasti principali |
 
+- **Coppie testo/sfondo controllate da C29** (tutte devono avere contrasto ≥ 4,5:1): bianco su `--blu-notte`,
+  bianco su `--blu-notte-2`, bianco su `--tasto-alto` e su `--tasto-basso`; `--testo` su `--carta` e su `--sfondo`;
+  `--tenue` su `--carta`, su `--sfondo` e su `--fascia`; `--blu-link` su `--carta` e su `--sfondo`;
+  `--blu-notte` su `--fascia`, su `--etichetta`, su `--avatar` e su `--carta`; `--rosso` su `--carta`.
 - **Misure** (C30, decisione 5): `html { font-size: 18px }`, `h1 { font-size: 28px }`; ogni `font-size` scritto in
   `px` o `rem` (mai `em` o `%`) e mai sotto 13,5 px (= 0.75rem); foto della testata
   140 px, miniature 90 px, angoli delle foto 12 px, pagina larga al massimo 1200 px.
@@ -236,7 +242,7 @@ Riferimento: **`design/bozza.html`**, la bozza approvata dall'utente (C35). Le p
   della persona tipica sia entro 650 px; in una cornice larga 390 px controlla che la pagina non sia più
   larga dello schermo. L'HTML della persona tipica lo produce `python -m whoswho.avvio scheda-tipica`
   dentro il container `app`, usando il database **dei test** (i dati veri non si toccano); la pagina usa
-  il foglio di stile vero servito da nginx (`<base href="http://localhost:8000/">`).
+  il foglio di stile vero servito da nginx (`<base href="http://localhost:<HOST_APP_PORT>/">`, 8000 di default).
 
 ## 5. Test
 

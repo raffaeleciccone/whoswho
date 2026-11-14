@@ -4,11 +4,11 @@ Ultimo aggiornamento: 14/11/2026
 
 ## Stato
 
-- **SPEC.md approvata** (F1-F9, criteri C1-C38, regole import D4-D7), tranne le fonti dati D1-D2, che aspettano il prof.
+- **SPEC.md approvata** (F1-F9, criteri C1-C39, regole import D4-D7), tranne le fonti dati D1-D2, che aspettano il prof.
 - **Programma funzionante** su http://localhost:8000 con persone inventate di esempio:
   ricerca per nome (anche a pezzi) / azienda / skill / evento, scheda persona, persone collegate
   (colleghi, stesso evento, collegamenti a mano), barra di navigazione, Indietro, Precedente/Successiva.
-- **52 test, tutti verdi** (`docker compose run --rm app pytest -q`).
+- **53 test, tutti verdi** (`docker compose run --rm app pytest -q`).
   Verificato che i test se ne accorgono se si rompe una regola (provato su C8, C22, C25, C26, C27, C28).
 - **Esperimento di ricostruzione fatto** (`esperimento-ricostruzione/`): un Claude nuovo ha rifatto
   il progetto dai soli .md; i suoi 36 dubbi hanno portato a: regola "stessa persona" (D4-D5, C18-C20),
@@ -31,6 +31,8 @@ Ultimo aggiornamento: 14/11/2026
 - `kit-ricostruzione/`: cartella unica per i compagni (LEGGIMI, PROMPT, STRUMENTI, VERIFICA, misura_c34.py,
   dati-di-prova, progetto/ con i soli documenti). Le copie si aggiornano con `python strumenti/aggiorna_kit.py`
   (`--controlla` prima di ogni commit). Antigravity non ancora provato.
+- Prova 4 "da studente" (ZIP da GitHub + kit alla lettera) riuscita: 579 px, dati accettati; ha trovato
+  un errore vero (fine non valida = colleghi falsi), corretto con C39 su decisione dell'utente.
 
 ## Prossimo passo: lunedì 16/11, incontro con il prof
 
